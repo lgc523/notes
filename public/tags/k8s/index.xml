@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>k8s on 不过如此</title>
+    <link>http://1.116.1.92/tags/k8s/</link>
+    <description>Recent content in k8s on 不过如此</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Wed, 11 Aug 2021 01:06:35 +0800</lastBuildDate><atom:link href="http://1.116.1.92/tags/k8s/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>K8s 安装</title>
+      <link>http://1.116.1.92/posts/cloud/k8s/</link>
+      <pubDate>Wed, 11 Aug 2021 01:06:35 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/cloud/k8s/</guid>
+      <description>1.systemctl stop firewalld &amp;amp;&amp;amp; systemctl disable firewalld 2.sed -i &#39;s/SELINUX=enforcing/SELINUX=disabled/&#39; /etc/selinux/config;cat /etc/selinux/config 3.sed -i.bak &#39;/swap/s/^/#/&#39; /etc/fstab 4.cat &amp;lt;&amp;lt;EOF &amp;gt; /etc/sysctl.d/k8s.conf net.bridge.bridge-nf-call-ip6tables = 1 net.bridge.bridge-nf-call-iptables = 1 EOF 5.sysctl -p /etc/sysctl.d/k8s.conf 6.cat &amp;lt;&amp;lt;EOF &amp;gt; /etc/yum.repos.d/kubernetes.repo [kubernetes] name=Kubernetes baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/ enabled=1 gpgcheck=1 repo_gpgcheck=1 gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg EOF 7.yum clean all 8.yum -y makecache 9.yum install -y yum-utils device-mapper-persistent-data lvm2 10.yum-config-manager \ --add-repo \ https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo 11.yum install docker-ce-19.03.13 docker-ce-cli-19.03.13 containerd.io -y 12.systemctl enable --now docker 13.vi /etc/docker/daemon.json { &amp;quot;registry-mirrors&amp;quot;: [&amp;quot;https://mirror.ccs.tencentyun.com&amp;quot;], &amp;quot;insecure-registries&amp;quot;:[&amp;quot;guangchang.tech:5000&amp;quot;], &amp;quot;exec-opts&amp;quot;: [&amp;quot;native.cgroupdriver=systemd&amp;quot;] } 14.systemctl daemon-reload 15.systemctl restart docker 16.yum install -y kubelet-1.19.2 kubeadm-1.19.2 kubectl-1.19.2 17.kubeadm init phase preflight 18.echo &amp;quot;source &amp;lt;(kubectl completion bash)&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile source .bash_profile 19.vim image.sh #!/bin/bash url=registry.aliyuncs.com/google_containers version=v1.19.2 images=(`kubeadm config images list --kubernetes-version=$version|awk -F &#39;/&#39; &#39;{print $2}&#39;`) for imagename in ${images[@]} ; do docker pull $url/$imagename docker tag $url/$imagename k8s.gcr.io/$imagename docker rmi -f $url/$imagename done 20.bash image.sh 21./var/lib/kubelet/kubeadm-flags.env cni 21.kubeadm init --apiserver-advertise-address=49.232.212.110 --kubernetes-version v1.19.2 --service-cidr=10.96.0.0/12 --pod-network-cidr=10.244.0.0/16 </description>
+    </item>
+    
+  </channel>
+</rss>

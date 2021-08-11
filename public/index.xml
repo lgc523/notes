@@ -1,11 +1,126 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Spider</title>
-    <link>https://example.com/</link>
-    <description>Recent content on Spider</description>
+    <title>不过如此</title>
+    <link>http://1.116.1.92/</link>
+    <description>Recent content on 不过如此</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Wed, 11 Aug 2021 01:18:20 +0800</lastBuildDate><atom:link href="http://1.116.1.92/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Java Basic</title>
+      <link>http://1.116.1.92/posts/java/java-basic/</link>
+      <pubDate>Wed, 11 Aug 2021 01:18:20 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/java/java-basic/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go Basic</title>
+      <link>http://1.116.1.92/posts/go/go-basic/</link>
+      <pubDate>Wed, 11 Aug 2021 01:17:20 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/go/go-basic/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Rust Basic</title>
+      <link>http://1.116.1.92/posts/rust/rust/</link>
+      <pubDate>Wed, 11 Aug 2021 01:17:11 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/rust/rust/</guid>
+      <description>每个变量建立清晰的生命周期，一旦超过生命周期，变量自动释放，不需要垃圾回收
+每个被分配的内存都有一个独占其所有权的指针,指针被销毁，对应的内存才会被释放
+cargo cargo install cargo-generate wasm cargo install cargo-generate cargo install wasm-pack </description>
+    </item>
+    
+    <item>
+      <title>Centos8</title>
+      <link>http://1.116.1.92/posts/cloud/centos8/</link>
+      <pubDate>Wed, 11 Aug 2021 01:15:15 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/cloud/centos8/</guid>
+      <description>1.mongodb vi /etc/yum.repos.d/mongodb-org-4.4.repo [mongodb-org-4.2] name=MongoDB Repository baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/4.2/x86_64/ gpgcheck=1 enabled=1 gpgkey=https://www.mongodb.org/static/pgp/server-4.2.asc yum install mongodb-org systemctl enable mongodb --now # configure file /etc/mongod.conf # fix security: authorization: enabled #用户管理 db.version() mongo --quiet &amp;quot;mongodb://${MONGO_HOST}:${MONGO_PORT}&amp;quot; use db db.createUser({user:&amp;quot;${MONGO_USERNAME}&amp;quot;,pwd:&amp;quot;${MONGO_PASSWORD}&amp;quot;,roles:[&amp;quot;dbOwner&amp;quot;]}) dn.auth(&amp;quot;username&amp;quot;,&amp;quot;password&amp;quot;) db.getUsers() show users db.system.users.find().pretty() db.createUser( { user: &amp;quot;xxx&amp;quot;, pwd: &amp;quot;xxx&amp;quot;, roles: [ { role: &amp;quot;userAdminAnyDatabase&amp;quot;, db: &amp;quot;admin&amp;quot; } ] } ) db.createUser({user:&amp;quot;xxx&amp;quot;,pwd:&amp;quot;xxx&amp;quot;,roles:[&amp;quot;dbOwner&amp;quot;]}) 2.bottom sudo yum install epel-release sudo yum install snapd sudo systemctl enable --now snapd.socket sudo ln -s /var/lib/snapd/snap /snap sudo snap install bottom 3.zsh echo $shell yum install -y zsh chsh /bin/zsh sh -c &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&amp;quot; </description>
+    </item>
+    
+    <item>
+      <title>K8s 安装</title>
+      <link>http://1.116.1.92/posts/cloud/k8s/</link>
+      <pubDate>Wed, 11 Aug 2021 01:06:35 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/cloud/k8s/</guid>
+      <description>1.systemctl stop firewalld &amp;amp;&amp;amp; systemctl disable firewalld 2.sed -i &#39;s/SELINUX=enforcing/SELINUX=disabled/&#39; /etc/selinux/config;cat /etc/selinux/config 3.sed -i.bak &#39;/swap/s/^/#/&#39; /etc/fstab 4.cat &amp;lt;&amp;lt;EOF &amp;gt; /etc/sysctl.d/k8s.conf net.bridge.bridge-nf-call-ip6tables = 1 net.bridge.bridge-nf-call-iptables = 1 EOF 5.sysctl -p /etc/sysctl.d/k8s.conf 6.cat &amp;lt;&amp;lt;EOF &amp;gt; /etc/yum.repos.d/kubernetes.repo [kubernetes] name=Kubernetes baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/ enabled=1 gpgcheck=1 repo_gpgcheck=1 gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg EOF 7.yum clean all 8.yum -y makecache 9.yum install -y yum-utils device-mapper-persistent-data lvm2 10.yum-config-manager \ --add-repo \ https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo 11.yum install docker-ce-19.03.13 docker-ce-cli-19.03.13 containerd.io -y 12.systemctl enable --now docker 13.vi /etc/docker/daemon.json { &amp;quot;registry-mirrors&amp;quot;: [&amp;quot;https://mirror.ccs.tencentyun.com&amp;quot;], &amp;quot;insecure-registries&amp;quot;:[&amp;quot;guangchang.tech:5000&amp;quot;], &amp;quot;exec-opts&amp;quot;: [&amp;quot;native.cgroupdriver=systemd&amp;quot;] } 14.systemctl daemon-reload 15.systemctl restart docker 16.yum install -y kubelet-1.19.2 kubeadm-1.19.2 kubectl-1.19.2 17.kubeadm init phase preflight 18.echo &amp;quot;source &amp;lt;(kubectl completion bash)&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile source .bash_profile 19.vim image.sh #!/bin/bash url=registry.aliyuncs.com/google_containers version=v1.19.2 images=(`kubeadm config images list --kubernetes-version=$version|awk -F &#39;/&#39; &#39;{print $2}&#39;`) for imagename in ${images[@]} ; do docker pull $url/$imagename docker tag $url/$imagename k8s.gcr.io/$imagename docker rmi -f $url/$imagename done 20.bash image.sh 21./var/lib/kubelet/kubeadm-flags.env cni 21.kubeadm init --apiserver-advertise-address=49.232.212.110 --kubernetes-version v1.19.2 --service-cidr=10.96.0.0/12 --pod-network-cidr=10.244.0.0/16 </description>
+    </item>
+    
+    <item>
+      <title>Docker</title>
+      <link>http://1.116.1.92/posts/cloud/docker/</link>
+      <pubDate>Wed, 11 Aug 2021 00:44:20 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/cloud/docker/</guid>
+      <description>install centos7
+1.yum remove docker \ docker-client \ docker-client-latest \ docker-common \ docker-latest \ docker-latest-logrotate \ docker-logrotate \ docker-ce 2.yum list installed | grep docker 3.rm -rf /var/lib/docker rm -fr /etc/docker rm -fr ~/.docker 4.yum install -y yum-utils 5.yum-config-manager \ --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo 6.yum repolist 7.yum list docker-ce --showduplicates | sort -r 8.yum -y install docker-ce-19.03.8 docker-ce-cli-19.03.8 containerd.io { &amp;quot;registry-mirrors&amp;quot;: [&amp;quot;https://mirror.ccs.tencentyun.com&amp;quot;], &amp;quot;insecure-registries&amp;quot;:[&amp;quot;guangchang.tech:5000&amp;quot;], &amp;quot;exec-opts&amp;quot;: [&amp;quot;native.cgroupdriver=systemd&amp;quot;], &amp;quot;log-driver&amp;quot;: &amp;quot;json-file&amp;quot;, &amp;quot;log-opts&amp;quot;: { &amp;quot;max-size&amp;quot;: &amp;quot;100m&amp;quot; }, &amp;quot;storage-driver&amp;quot;: &amp;quot;overlay2&amp;quot;, &amp;quot;storage-opts&amp;quot;: [ &amp;quot;overlay2.override_kernel_check=true&amp;quot; ] } image docker [image] pull [url/]NAME[:TAG] 默认 TAG latest 镜像文件一般由若干层 layer 组成，id 是层唯一的 id(实际上完整的 id 包括 256 bit, 64 个二进制字符组成) 当不同景象包括相同的层时，本地仅存储了层的一份内容，减少了存储空间 1.下载命令 -a --all-tags=true|false 是否获取仓库中的所有镜像，默认为否 --disable-content-trust 取消镜像的内容校验，默认为真 --registry-mirror=proxy_URL 镜像代理服务地址 2.查询镜像命令ls、tag、inspect ls docker images ｜ docker image ls 列出本地主机上已有镜像的基本信息 列出信息 来自于哪个仓库 镜像的标签，只是标记，不能够标识镜像内容 镜像的id 唯一标识镜像，两个镜像相同，实际指向了同一个镜像 创建时间 镜像最后的更新时间 镜像大小 逻辑提及大小 -a --all=true｜false 列出所有包括临时文件镜像文件，默认为否 --digests=true|false 列出镜像的数字摘要值，默认为否 -f --filter=[] 过滤列出的镜像。dangling=true 只显示没有被使用的镜像 --format=&amp;quot;TEMPLATE&amp;quot;: 控制输出格式 --no-trunc=true|false 对输出结果中太长的部分是否进行截断，默认为是 -q --quiet=true｜false 仅输出ID信息，默认为否 tag 为镜像添加标签|重命名 docker tag xxx:yyy newXXX:yyy 类似 ln 软链接 inspect docker inspect image 获取镜像的详细信息，包括制作者、适应架构、各层的数字摘要 返回 json 格式 docker inspect -f {{&amp;quot;&amp;quot;.Architecture&amp;quot;}} xxx:yyy -s if the type is container history docker history xxx:yyyy 列出各层的创建信息 --no-trunc=false 输出完整命令 3.搜寻镜像 docker search [option] keyword -f --filter filter:过滤输出内容 --format string: 格式化输出内容 --limit int 限制输出个数，默认25个 --no-trunc 不截断输出结果 docker search --filter=is-official=true nginx docker search --filter=start=15 nginx --limit 15 4.</description>
+    </item>
+    
+    <item>
+      <title>Zookeeper</title>
+      <link>http://1.116.1.92/posts/middle-aware/zookeeper/</link>
+      <pubDate>Wed, 11 Aug 2021 00:03:05 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/middle-aware/zookeeper/</guid>
+      <description>zookeeper 是一个分布式协调服务，是集群的管理者，监视集群中各个节点的状态根据节点提交的反馈进行下一步操作 分布式程序可以基于 zk 实现诸如数据发布/订阅、负载均衡、命名服务、分布式协调/通知、集群管理、master选举、分布式锁和分布式队列。
+特性 顺序一致性（有序） 从同一个客户端发起的事务请求、最终将会严格按照其发起顺序被应用到 zk 中
+所有的更新都是全局有序的，每一个更新都有一个唯一的时间戳，zxid(zk transaction id)
+读请求只会相当对于更新有序，读请求的返回结果中会带有 zk 最新的 zxid
+原子性 所有事务请求的处理结果在整个集群中所有机器上的应用情况是一致的，即整个集群要么都成功应用了某个事务，要么都没有应用
+单一视图 无论客户端连接的是哪个 zk 客户端，其看到的服务端数据模型都是一致的
+可靠性 一旦服务端成功地应用了一个事务，并完成对客户端的响应，那么该事务所引起的服务端状态变更将会一直被保留，除非另一个事务对其进行了变更
+实时性 zookeeper 保证在一段时间内，客户端最终一定能够从服务端上读取到最新的数据状态</description>
+    </item>
+    
+    <item>
+      <title>Nginx</title>
+      <link>http://1.116.1.92/posts/middle-aware/nginx/</link>
+      <pubDate>Tue, 03 Aug 2021 22:26:02 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/middle-aware/nginx/</guid>
+      <description>#深入理解 Nginx</description>
+    </item>
+    
+    <item>
+      <title>Kafka</title>
+      <link>http://1.116.1.92/posts/middle-aware/kafka/</link>
+      <pubDate>Sun, 01 Aug 2021 17:59:44 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/middle-aware/kafka/</guid>
+      <description>深入理解 Kafka
+消息系统、存储系统、流式处理平台
+基本概念 经典Kafka体系架构包括若干Producer、若干 Broker、若干 Consumer，以及一个 Zookeeper 集群（可插拔） Zookeeper 负责集群元数据管理、控制器的选举 Producer 将消息发送到 Broker Broker 负责将收到的消息存储到磁盘中，代理服务 Consumer 负责从 Broker 订阅并消费消息
+Kafka 消息都是以主题为单位进行归类，生产者负责将消息发送到特定的主题(发送到Kafka 集群中的每一条消息都需要指定一个主题) 主题是逻辑上的概念，还可以细分为多个分区，一个分区只属于单个主题，也叫做主题分区(Topic Pariition)。
+同一个主题下的不同分区包含的消息是不同的，分区在存储层面可以看作是一个可追加的日志文件，消息在追加到分区日志文件的时候都会分配一个特定的偏移量 offset 是消息在分区中的唯一标识，Kafka 通过它来保证消息在分区内的顺序性，不过offset并不跨越分区，所以保证的是分区有序， 分区解决的主题的IO，创建主题可以通过指定参数设置分区个数，也可以在主题创建完成修改分区的数量，通过增加分区数量实现水平拓展。
+Kakfa 为分区引入了多副本 (Replica)机制，通过增加副本数量可以提升容灾能力。 同一分区的不同副本中保存的是相通的消息（在同一时刻，副本之间并非完全一样），副本之间是一主多从的关系 leader 节点负责处理读写请求，follower 副本只负责与 leader 副本的消息同步 副本处于不同的 broker 中，当 leader 副本出现故障时，从 follower 副本中重新选举新的 leader 副本对外提供服务 Kafka 通过多副本机制实现了故障的自动转移，当 Kafka 集群中某个 broker 失效时仍然能够保证服务可用。
+Kafka 消费端也具备一定的容灾能力，Consumer 使用拉（Pull）模式从服务端拉取消息，并且保存消费的具体位置，当消费者宕机后恢复上线时可以根据之前保存的消费位置重新拉取需要的消息进行消费,不会造成消息丢失。
+AR 分区中的所有副本 Assigned Replicas ISR 与leader副本保持一定程度同步的副本(包括leader副本在内)组成 In-Sync Replicas OSR 与leader 副本同步滞后过多的副本组成 Out-of-Sync AR=ISR+OSR 正常情况下 OSR=nil leader 副本负责维护和跟踪ISR集合中所有 follower 副本的滞后状态，当 follower 副本落后太多或者失效时，leader 副本会把他从 ISR 集合中剔除，如果 OSR 集合中有 follower 副本追上了 leader 副本，那么 leader 副本会把他从 OSR 集合转移到 ISR 集合。 默认情况下，只有在 ISR 集合中的副本才有资格被选举为新的 leader，OSR 集合中的副本则没有任何机会(可以修改配置改变)。
+ISR 与 HW、LEO HW (high watermark),高水位，标识了一个特定的消息偏移量，消费者只能拉取到这个 offset 之前的消息，后面消息不可见 LEO(Log End Offset) 标识当前日志文件中下一条代写入消息的 Offset，LEO 大小相当于当前日志分区中最后一条消息的 Offset +1 分区ISR 集合中的每个副本都会维护自身的 LEO，而ISR集合中最小的LEO极为HW,对消费者而言只能消费HW之前的消息。
+HW 通过 follower 副本同步完数据保证了数据的一致，即不是完全的同步复制也不是单纯的异步复制
+生产者 kafka服务端参数配置 zookeeper.connect broker 要链接的 zookeeper 集群的服务地址(包含端口号)，必填无默认值 chroot 路径 c1:2181,c2:2181/kafka
+listeners broker 监听客户端连接的地址列表，客户端连接 broker 的入口地址列表 格式： protocol1://hostname0:port0,protocol2://hostname1:port1 protocoal 协议类型 支持类型 PLAINTEXT,SSL,SASL_SSL 未开启安全认证，使用简单的 PLAINTEXT ，hostname 主机名默认为空，不知定主机名默认绑定默认网卡（127.0.0.1 就可能无法对外提供服务）。
+advertised.listeners 主要用于 Iaas(Infrastructure as a Service)环境，公网只配置这个 listeners 绑定私网 broker 间通信
+broker.id 指定集群中 broker 唯一标示，默认-1,如果没有设置自动生成一个，和 meta.properties、服务端参数 broker.id.generation.enable 、reserved.broker.max.id 有关
+log.dir log.dirs kafka 把所有的消息报存在磁盘上，log.dir 配置kafka 日志文件存放的根目录 log.dir 配置单个根目录，log.dirs 用来配置多个根目录(逗号分隔) log.dirs 优先级高，没有配置 log.dirs 会以 log.dir 配置为准</description>
+    </item>
+    
+    <item>
+      <title>MySQL</title>
+      <link>http://1.116.1.92/posts/db/mysql/</link>
+      <pubDate>Sun, 01 Aug 2021 17:59:44 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/db/mysql/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>

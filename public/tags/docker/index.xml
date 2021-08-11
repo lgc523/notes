@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>docker on 不过如此</title>
+    <link>http://1.116.1.92/tags/docker/</link>
+    <description>Recent content in docker on 不过如此</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Wed, 11 Aug 2021 00:44:20 +0800</lastBuildDate><atom:link href="http://1.116.1.92/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Docker</title>
+      <link>http://1.116.1.92/posts/cloud/docker/</link>
+      <pubDate>Wed, 11 Aug 2021 00:44:20 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/cloud/docker/</guid>
+      <description>install centos7
+1.yum remove docker \ docker-client \ docker-client-latest \ docker-common \ docker-latest \ docker-latest-logrotate \ docker-logrotate \ docker-ce 2.yum list installed | grep docker 3.rm -rf /var/lib/docker rm -fr /etc/docker rm -fr ~/.docker 4.yum install -y yum-utils 5.yum-config-manager \ --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo 6.yum repolist 7.yum list docker-ce --showduplicates | sort -r 8.yum -y install docker-ce-19.03.8 docker-ce-cli-19.03.8 containerd.io { &amp;quot;registry-mirrors&amp;quot;: [&amp;quot;https://mirror.ccs.tencentyun.com&amp;quot;], &amp;quot;insecure-registries&amp;quot;:[&amp;quot;guangchang.tech:5000&amp;quot;], &amp;quot;exec-opts&amp;quot;: [&amp;quot;native.cgroupdriver=systemd&amp;quot;], &amp;quot;log-driver&amp;quot;: &amp;quot;json-file&amp;quot;, &amp;quot;log-opts&amp;quot;: { &amp;quot;max-size&amp;quot;: &amp;quot;100m&amp;quot; }, &amp;quot;storage-driver&amp;quot;: &amp;quot;overlay2&amp;quot;, &amp;quot;storage-opts&amp;quot;: [ &amp;quot;overlay2.override_kernel_check=true&amp;quot; ] } image docker [image] pull [url/]NAME[:TAG] 默认 TAG latest 镜像文件一般由若干层 layer 组成，id 是层唯一的 id(实际上完整的 id 包括 256 bit, 64 个二进制字符组成) 当不同景象包括相同的层时，本地仅存储了层的一份内容，减少了存储空间 1.下载命令 -a --all-tags=true|false 是否获取仓库中的所有镜像，默认为否 --disable-content-trust 取消镜像的内容校验，默认为真 --registry-mirror=proxy_URL 镜像代理服务地址 2.查询镜像命令ls、tag、inspect ls docker images ｜ docker image ls 列出本地主机上已有镜像的基本信息 列出信息 来自于哪个仓库 镜像的标签，只是标记，不能够标识镜像内容 镜像的id 唯一标识镜像，两个镜像相同，实际指向了同一个镜像 创建时间 镜像最后的更新时间 镜像大小 逻辑提及大小 -a --all=true｜false 列出所有包括临时文件镜像文件，默认为否 --digests=true|false 列出镜像的数字摘要值，默认为否 -f --filter=[] 过滤列出的镜像。dangling=true 只显示没有被使用的镜像 --format=&amp;quot;TEMPLATE&amp;quot;: 控制输出格式 --no-trunc=true|false 对输出结果中太长的部分是否进行截断，默认为是 -q --quiet=true｜false 仅输出ID信息，默认为否 tag 为镜像添加标签|重命名 docker tag xxx:yyy newXXX:yyy 类似 ln 软链接 inspect docker inspect image 获取镜像的详细信息，包括制作者、适应架构、各层的数字摘要 返回 json 格式 docker inspect -f {{&amp;quot;&amp;quot;.Architecture&amp;quot;}} xxx:yyy -s if the type is container history docker history xxx:yyyy 列出各层的创建信息 --no-trunc=false 输出完整命令 3.搜寻镜像 docker search [option] keyword -f --filter filter:过滤输出内容 --format string: 格式化输出内容 --limit int 限制输出个数，默认25个 --no-trunc 不截断输出结果 docker search --filter=is-official=true nginx docker search --filter=start=15 nginx --limit 15 4.</description>
+    </item>
+    
+  </channel>
+</rss>

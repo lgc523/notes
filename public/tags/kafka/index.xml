@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>kafka on 不过如此</title>
+    <link>http://1.116.1.92/tags/kafka/</link>
+    <description>Recent content in kafka on 不过如此</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Sun, 01 Aug 2021 17:59:44 +0800</lastBuildDate><atom:link href="http://1.116.1.92/tags/kafka/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kafka</title>
+      <link>http://1.116.1.92/posts/middle-aware/kafka/</link>
+      <pubDate>Sun, 01 Aug 2021 17:59:44 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/middle-aware/kafka/</guid>
+      <description>深入理解 Kafka
+消息系统、存储系统、流式处理平台
+基本概念 经典Kafka体系架构包括若干Producer、若干 Broker、若干 Consumer，以及一个 Zookeeper 集群（可插拔） Zookeeper 负责集群元数据管理、控制器的选举 Producer 将消息发送到 Broker Broker 负责将收到的消息存储到磁盘中，代理服务 Consumer 负责从 Broker 订阅并消费消息
+Kafka 消息都是以主题为单位进行归类，生产者负责将消息发送到特定的主题(发送到Kafka 集群中的每一条消息都需要指定一个主题) 主题是逻辑上的概念，还可以细分为多个分区，一个分区只属于单个主题，也叫做主题分区(Topic Pariition)。
+同一个主题下的不同分区包含的消息是不同的，分区在存储层面可以看作是一个可追加的日志文件，消息在追加到分区日志文件的时候都会分配一个特定的偏移量 offset 是消息在分区中的唯一标识，Kafka 通过它来保证消息在分区内的顺序性，不过offset并不跨越分区，所以保证的是分区有序， 分区解决的主题的IO，创建主题可以通过指定参数设置分区个数，也可以在主题创建完成修改分区的数量，通过增加分区数量实现水平拓展。
+Kakfa 为分区引入了多副本 (Replica)机制，通过增加副本数量可以提升容灾能力。 同一分区的不同副本中保存的是相通的消息（在同一时刻，副本之间并非完全一样），副本之间是一主多从的关系 leader 节点负责处理读写请求，follower 副本只负责与 leader 副本的消息同步 副本处于不同的 broker 中，当 leader 副本出现故障时，从 follower 副本中重新选举新的 leader 副本对外提供服务 Kafka 通过多副本机制实现了故障的自动转移，当 Kafka 集群中某个 broker 失效时仍然能够保证服务可用。
+Kafka 消费端也具备一定的容灾能力，Consumer 使用拉（Pull）模式从服务端拉取消息，并且保存消费的具体位置，当消费者宕机后恢复上线时可以根据之前保存的消费位置重新拉取需要的消息进行消费,不会造成消息丢失。
+AR 分区中的所有副本 Assigned Replicas ISR 与leader副本保持一定程度同步的副本(包括leader副本在内)组成 In-Sync Replicas OSR 与leader 副本同步滞后过多的副本组成 Out-of-Sync AR=ISR+OSR 正常情况下 OSR=nil leader 副本负责维护和跟踪ISR集合中所有 follower 副本的滞后状态，当 follower 副本落后太多或者失效时，leader 副本会把他从 ISR 集合中剔除，如果 OSR 集合中有 follower 副本追上了 leader 副本，那么 leader 副本会把他从 OSR 集合转移到 ISR 集合。 默认情况下，只有在 ISR 集合中的副本才有资格被选举为新的 leader，OSR 集合中的副本则没有任何机会(可以修改配置改变)。
+ISR 与 HW、LEO HW (high watermark),高水位，标识了一个特定的消息偏移量，消费者只能拉取到这个 offset 之前的消息，后面消息不可见 LEO(Log End Offset) 标识当前日志文件中下一条代写入消息的 Offset，LEO 大小相当于当前日志分区中最后一条消息的 Offset +1 分区ISR 集合中的每个副本都会维护自身的 LEO，而ISR集合中最小的LEO极为HW,对消费者而言只能消费HW之前的消息。
+HW 通过 follower 副本同步完数据保证了数据的一致，即不是完全的同步复制也不是单纯的异步复制
+生产者 kafka服务端参数配置 zookeeper.connect broker 要链接的 zookeeper 集群的服务地址(包含端口号)，必填无默认值 chroot 路径 c1:2181,c2:2181/kafka
+listeners broker 监听客户端连接的地址列表，客户端连接 broker 的入口地址列表 格式： protocol1://hostname0:port0,protocol2://hostname1:port1 protocoal 协议类型 支持类型 PLAINTEXT,SSL,SASL_SSL 未开启安全认证，使用简单的 PLAINTEXT ，hostname 主机名默认为空，不知定主机名默认绑定默认网卡（127.0.0.1 就可能无法对外提供服务）。
+advertised.listeners 主要用于 Iaas(Infrastructure as a Service)环境，公网只配置这个 listeners 绑定私网 broker 间通信
+broker.id 指定集群中 broker 唯一标示，默认-1,如果没有设置自动生成一个，和 meta.properties、服务端参数 broker.id.generation.enable 、reserved.broker.max.id 有关
+log.dir log.dirs kafka 把所有的消息报存在磁盘上，log.dir 配置kafka 日志文件存放的根目录 log.dir 配置单个根目录，log.dirs 用来配置多个根目录(逗号分隔) log.dirs 优先级高，没有配置 log.dirs 会以 log.dir 配置为准</description>
+    </item>
+    
+  </channel>
+</rss>

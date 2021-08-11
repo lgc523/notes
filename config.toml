@@ -1,7 +1,7 @@
-baseURL = "https://example.com"
+baseURL = "http://1.116.1.92"
 languageCode = "en-us"
 defaultContentLanguage = "zh-hans"
-title = "Spider"
+title = "不过如此"
 theme = "hermit"
 # enableGitInfo = true
 pygmentsCodefences  = true
@@ -16,7 +16,7 @@ googleAnalytics = "UA-166045776-1"
 summarylength = 180
 
 [author]
-  name = "lgc523"
+  name = "不过如此"
 
 [blackfriday]
   # hrefTargetBlank = true
@@ -67,16 +67,16 @@ summarylength = 180
 [menu]
 
   [[menu.main]]
-    name = "Notes"
+    name = "笔记"
     url = "posts/"
-    weight = 10
+    weight = 11
 
   [[menu.main]]
-    name = "Tags"
+    name = "标签"
     url = "tags/"
-    weight = 10
+    weight = 12
 
   [[menu.main]]
-    name = "About"
+    name = "关于"
     url = "about/"
-    weight = 20
+    weight = 13

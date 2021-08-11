@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>centos on 不过如此</title>
+    <link>http://1.116.1.92/tags/centos/</link>
+    <description>Recent content in centos on 不过如此</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Wed, 11 Aug 2021 01:15:15 +0800</lastBuildDate><atom:link href="http://1.116.1.92/tags/centos/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Centos8</title>
+      <link>http://1.116.1.92/posts/cloud/centos8/</link>
+      <pubDate>Wed, 11 Aug 2021 01:15:15 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/cloud/centos8/</guid>
+      <description>1.mongodb vi /etc/yum.repos.d/mongodb-org-4.4.repo [mongodb-org-4.2] name=MongoDB Repository baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/4.2/x86_64/ gpgcheck=1 enabled=1 gpgkey=https://www.mongodb.org/static/pgp/server-4.2.asc yum install mongodb-org systemctl enable mongodb --now # configure file /etc/mongod.conf # fix security: authorization: enabled #用户管理 db.version() mongo --quiet &amp;quot;mongodb://${MONGO_HOST}:${MONGO_PORT}&amp;quot; use db db.createUser({user:&amp;quot;${MONGO_USERNAME}&amp;quot;,pwd:&amp;quot;${MONGO_PASSWORD}&amp;quot;,roles:[&amp;quot;dbOwner&amp;quot;]}) dn.auth(&amp;quot;username&amp;quot;,&amp;quot;password&amp;quot;) db.getUsers() show users db.system.users.find().pretty() db.createUser( { user: &amp;quot;xxx&amp;quot;, pwd: &amp;quot;xxx&amp;quot;, roles: [ { role: &amp;quot;userAdminAnyDatabase&amp;quot;, db: &amp;quot;admin&amp;quot; } ] } ) db.createUser({user:&amp;quot;xxx&amp;quot;,pwd:&amp;quot;xxx&amp;quot;,roles:[&amp;quot;dbOwner&amp;quot;]}) 2.bottom sudo yum install epel-release sudo yum install snapd sudo systemctl enable --now snapd.socket sudo ln -s /var/lib/snapd/snap /snap sudo snap install bottom 3.zsh echo $shell yum install -y zsh chsh /bin/zsh sh -c &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&amp;quot; </description>
+    </item>
+    
+  </channel>
+</rss>

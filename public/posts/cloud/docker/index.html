@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="theme-color" content="#fcfcfc">
+	<meta name="msapplication-TileColor" content="#fcfcfc">
+<meta itemprop="name" content="Docker">
+<meta itemprop="description" content="install centos7
+1.yum remove docker \ docker-client \ docker-client-latest \ docker-common \ docker-latest \ docker-latest-logrotate \ docker-logrotate \ docker-ce 2.yum list installed | grep docker 3.rm -rf /var/lib/docker rm -fr /etc/docker rm -fr ~/.docker 4.yum install -y yum-utils 5.yum-config-manager \ --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo 6.yum repolist 7.yum list docker-ce --showduplicates | sort -r 8.yum -y install docker-ce-19.03.8 docker-ce-cli-19.03.8 containerd.io { &quot;registry-mirrors&quot;: [&quot;https://mirror.ccs.tencentyun.com&quot;], &quot;insecure-registries&quot;:[&quot;guangchang.tech:5000&quot;], &quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;], &quot;log-driver&quot;: &quot;json-file&quot;, &quot;log-opts&quot;: { &quot;max-size&quot;: &quot;100m&quot; }, &quot;storage-driver&quot;: &quot;overlay2&quot;, &quot;storage-opts&quot;: [ &quot;overlay2.override_kernel_check=true&quot; ] } image docker [image] pull [url/]NAME[:TAG] 默认 TAG latest 镜像文件一般由若干层 layer 组成，id 是层唯一的 id(实际上完整的 id 包括 256 bit, 64 个二进制字符组成) 当不同景象包括相同的层时，本地仅存储了层的一份内容，减少了存储空间 1.下载命令 -a --all-tags=true|false 是否获取仓库中的所有镜像，默认为否 --disable-content-trust 取消镜像的内容校验，默认为真 --registry-mirror=proxy_URL 镜像代理服务地址 2.查询镜像命令ls、tag、inspect ls docker images ｜ docker image ls 列出本地主机上已有镜像的基本信息 列出信息 来自于哪个仓库 镜像的标签，只是标记，不能够标识镜像内容 镜像的id 唯一标识镜像，两个镜像相同，实际指向了同一个镜像 创建时间 镜像最后的更新时间 镜像大小 逻辑提及大小 -a --all=true｜false 列出所有包括临时文件镜像文件，默认为否 --digests=true|false 列出镜像的数字摘要值，默认为否 -f --filter=[] 过滤列出的镜像。dangling=true 只显示没有被使用的镜像 --format=&quot;TEMPLATE&quot;: 控制输出格式 --no-trunc=true|false 对输出结果中太长的部分是否进行截断，默认为是 -q --quiet=true｜false 仅输出ID信息，默认为否 tag 为镜像添加标签|重命名 docker tag xxx:yyy newXXX:yyy 类似 ln 软链接 inspect docker inspect image 获取镜像的详细信息，包括制作者、适应架构、各层的数字摘要 返回 json 格式 docker inspect -f {{&quot;&quot;.Architecture&quot;}} xxx:yyy -s if the type is container history docker history xxx:yyyy 列出各层的创建信息 --no-trunc=false 输出完整命令 3.搜寻镜像 docker search [option] keyword -f --filter filter:过滤输出内容 --format string: 格式化输出内容 --limit int 限制输出个数，默认25个 --no-trunc 不截断输出结果 docker search --filter=is-official=true nginx docker search --filter=start=15 nginx --limit 15 4."><meta itemprop="datePublished" content="2021-08-11T00:44:20+08:00" />
+<meta itemprop="dateModified" content="2021-08-11T00:44:20+08:00" />
+<meta itemprop="wordCount" content="1041">
+<meta itemprop="keywords" content="cloud,docker," /><meta property="og:title" content="Docker" />
+<meta property="og:description" content="install centos7
+1.yum remove docker \ docker-client \ docker-client-latest \ docker-common \ docker-latest \ docker-latest-logrotate \ docker-logrotate \ docker-ce 2.yum list installed | grep docker 3.rm -rf /var/lib/docker rm -fr /etc/docker rm -fr ~/.docker 4.yum install -y yum-utils 5.yum-config-manager \ --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo 6.yum repolist 7.yum list docker-ce --showduplicates | sort -r 8.yum -y install docker-ce-19.03.8 docker-ce-cli-19.03.8 containerd.io { &quot;registry-mirrors&quot;: [&quot;https://mirror.ccs.tencentyun.com&quot;], &quot;insecure-registries&quot;:[&quot;guangchang.tech:5000&quot;], &quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;], &quot;log-driver&quot;: &quot;json-file&quot;, &quot;log-opts&quot;: { &quot;max-size&quot;: &quot;100m&quot; }, &quot;storage-driver&quot;: &quot;overlay2&quot;, &quot;storage-opts&quot;: [ &quot;overlay2.override_kernel_check=true&quot; ] } image docker [image] pull [url/]NAME[:TAG] 默认 TAG latest 镜像文件一般由若干层 layer 组成，id 是层唯一的 id(实际上完整的 id 包括 256 bit, 64 个二进制字符组成) 当不同景象包括相同的层时，本地仅存储了层的一份内容，减少了存储空间 1.下载命令 -a --all-tags=true|false 是否获取仓库中的所有镜像，默认为否 --disable-content-trust 取消镜像的内容校验，默认为真 --registry-mirror=proxy_URL 镜像代理服务地址 2.查询镜像命令ls、tag、inspect ls docker images ｜ docker image ls 列出本地主机上已有镜像的基本信息 列出信息 来自于哪个仓库 镜像的标签，只是标记，不能够标识镜像内容 镜像的id 唯一标识镜像，两个镜像相同，实际指向了同一个镜像 创建时间 镜像最后的更新时间 镜像大小 逻辑提及大小 -a --all=true｜false 列出所有包括临时文件镜像文件，默认为否 --digests=true|false 列出镜像的数字摘要值，默认为否 -f --filter=[] 过滤列出的镜像。dangling=true 只显示没有被使用的镜像 --format=&quot;TEMPLATE&quot;: 控制输出格式 --no-trunc=true|false 对输出结果中太长的部分是否进行截断，默认为是 -q --quiet=true｜false 仅输出ID信息，默认为否 tag 为镜像添加标签|重命名 docker tag xxx:yyy newXXX:yyy 类似 ln 软链接 inspect docker inspect image 获取镜像的详细信息，包括制作者、适应架构、各层的数字摘要 返回 json 格式 docker inspect -f {{&quot;&quot;.Architecture&quot;}} xxx:yyy -s if the type is container history docker history xxx:yyyy 列出各层的创建信息 --no-trunc=false 输出完整命令 3.搜寻镜像 docker search [option] keyword -f --filter filter:过滤输出内容 --format string: 格式化输出内容 --limit int 限制输出个数，默认25个 --no-trunc 不截断输出结果 docker search --filter=is-official=true nginx docker search --filter=start=15 nginx --limit 15 4." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://1.116.1.92/posts/cloud/docker/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-11T00:44:20+08:00" />
+<meta property="article:modified_time" content="2021-08-11T00:44:20+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Docker"/>
+<meta name="twitter:description" content="install centos7
+1.yum remove docker \ docker-client \ docker-client-latest \ docker-common \ docker-latest \ docker-latest-logrotate \ docker-logrotate \ docker-ce 2.yum list installed | grep docker 3.rm -rf /var/lib/docker rm -fr /etc/docker rm -fr ~/.docker 4.yum install -y yum-utils 5.yum-config-manager \ --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo 6.yum repolist 7.yum list docker-ce --showduplicates | sort -r 8.yum -y install docker-ce-19.03.8 docker-ce-cli-19.03.8 containerd.io { &quot;registry-mirrors&quot;: [&quot;https://mirror.ccs.tencentyun.com&quot;], &quot;insecure-registries&quot;:[&quot;guangchang.tech:5000&quot;], &quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;], &quot;log-driver&quot;: &quot;json-file&quot;, &quot;log-opts&quot;: { &quot;max-size&quot;: &quot;100m&quot; }, &quot;storage-driver&quot;: &quot;overlay2&quot;, &quot;storage-opts&quot;: [ &quot;overlay2.override_kernel_check=true&quot; ] } image docker [image] pull [url/]NAME[:TAG] 默认 TAG latest 镜像文件一般由若干层 layer 组成，id 是层唯一的 id(实际上完整的 id 包括 256 bit, 64 个二进制字符组成) 当不同景象包括相同的层时，本地仅存储了层的一份内容，减少了存储空间 1.下载命令 -a --all-tags=true|false 是否获取仓库中的所有镜像，默认为否 --disable-content-trust 取消镜像的内容校验，默认为真 --registry-mirror=proxy_URL 镜像代理服务地址 2.查询镜像命令ls、tag、inspect ls docker images ｜ docker image ls 列出本地主机上已有镜像的基本信息 列出信息 来自于哪个仓库 镜像的标签，只是标记，不能够标识镜像内容 镜像的id 唯一标识镜像，两个镜像相同，实际指向了同一个镜像 创建时间 镜像最后的更新时间 镜像大小 逻辑提及大小 -a --all=true｜false 列出所有包括临时文件镜像文件，默认为否 --digests=true|false 列出镜像的数字摘要值，默认为否 -f --filter=[] 过滤列出的镜像。dangling=true 只显示没有被使用的镜像 --format=&quot;TEMPLATE&quot;: 控制输出格式 --no-trunc=true|false 对输出结果中太长的部分是否进行截断，默认为是 -q --quiet=true｜false 仅输出ID信息，默认为否 tag 为镜像添加标签|重命名 docker tag xxx:yyy newXXX:yyy 类似 ln 软链接 inspect docker inspect image 获取镜像的详细信息，包括制作者、适应架构、各层的数字摘要 返回 json 格式 docker inspect -f {{&quot;&quot;.Architecture&quot;}} xxx:yyy -s if the type is container history docker history xxx:yyyy 列出各层的创建信息 --no-trunc=false 输出完整命令 3.搜寻镜像 docker search [option] keyword -f --filter filter:过滤输出内容 --format string: 格式化输出内容 --limit int 限制输出个数，默认25个 --no-trunc 不截断输出结果 docker search --filter=is-official=true nginx docker search --filter=start=15 nginx --limit 15 4."/>
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="">
+	<link rel="shortcut icon" href="/favicon.ico">
+
+	<title>Docker</title>
+	<link rel="stylesheet" href="http://1.116.1.92/css/style.min.88b6361df264d7d34baed8b4516a7c42576072fb77538ba36216b975cd877578.css" integrity="sha256-iLY2HfJk19NLrti0UWp8Qldgcvt3U4ujYha5dc2HdXg=" crossorigin="anonymous">
+	
+</head>
+
+<body id="page">
+	
+	<header id="site-header" class="animated slideInUp">
+		<div class="hdr-wrapper section-inner">
+			<div class="hdr-left">
+				<div class="site-branding">
+					<a href="http://1.116.1.92">不过如此</a>
+				</div>
+				<nav class="site-nav hide-in-mobile">
+					
+				<a href="http://1.116.1.92/posts/">笔记</a>
+				<a href="http://1.116.1.92/tags/">标签</a>
+				<a href="http://1.116.1.92/about/">关于</a>
+
+				</nav>
+			</div>
+			<div class="hdr-right hdr-icons">
+				<button id="toc-btn" class="hdr-btn desktop-only-ib" title="目录"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg></button><span class="hdr-social hide-in-mobile"><a href="https://github.com/lgc523" target="_blank" rel="noopener me" title="Github"><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a></span><button id="menu-btn" class="hdr-btn" title="菜单"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+			</div>
+		</div>
+	</header>
+	<div id="mobile-menu" class="animated fast">
+		<ul>
+			<li><a href="http://1.116.1.92/posts/">笔记</a></li>
+			<li><a href="http://1.116.1.92/tags/">标签</a></li>
+			<li><a href="http://1.116.1.92/about/">关于</a></li>
+		</ul>
+	</div>
+
+
+	<main class="site-main section-inner animated fadeIn faster">
+		<article class="thin">
+			<header class="post-header">
+				<div class="post-meta"><span>08-11</span></div>
+				<h1>Docker</h1>
+			</header>
+			<div class="content">
+				<h2 id="install">install<a href="#install" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<p><code>centos7</code></p>
+<pre><code>1.yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-ce
+
+2.yum list installed  | grep docker   
+3.rm -rf /var/lib/docker rm -fr /etc/docker rm -fr ~/.docker
+4.yum install -y yum-utils
+5.yum-config-manager \
+ --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+6.yum repolist
+7.yum list docker-ce --showduplicates | sort -r
+8.yum -y install docker-ce-19.03.8 docker-ce-cli-19.03.8 containerd.io
+
+{
+  &quot;registry-mirrors&quot;: [&quot;https://mirror.ccs.tencentyun.com&quot;],
+	&quot;insecure-registries&quot;:[&quot;guangchang.tech:5000&quot;],
+  &quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;],
+  &quot;log-driver&quot;: &quot;json-file&quot;,
+  &quot;log-opts&quot;: {
+    &quot;max-size&quot;: &quot;100m&quot;
+  },
+  &quot;storage-driver&quot;: &quot;overlay2&quot;,
+  &quot;storage-opts&quot;: [
+    &quot;overlay2.override_kernel_check=true&quot;
+  ]
+}
+
+</code></pre><h2 id="image">image<a href="#image" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<pre><code>docker [image] pull [url/]NAME[:TAG] 默认 TAG latest
+镜像文件一般由若干层 layer 组成，id 是层唯一的 id(实际上完整的 id 包括 256 bit, 64 个二进制字符组成)
+当不同景象包括相同的层时，本地仅存储了层的一份内容，减少了存储空间
+</code></pre><h3 id="1下载命令">1.下载命令<a href="#1下载命令" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>-a  --all-tags=true|false 是否获取仓库中的所有镜像，默认为否
+--disable-content-trust 取消镜像的内容校验，默认为真
+--registry-mirror=proxy_URL 镜像代理服务地址
+</code></pre><h3 id="2查询镜像命令lstaginspect">2.查询镜像命令ls、tag、inspect<a href="#2查询镜像命令lstaginspect" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h4 id="ls">ls<a href="#ls" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<pre><code>docker images ｜ docker image ls 列出本地主机上已有镜像的基本信息
+列出信息
+来自于哪个仓库
+镜像的标签，只是标记，不能够标识镜像内容
+镜像的id 唯一标识镜像，两个镜像相同，实际指向了同一个镜像
+创建时间 镜像最后的更新时间
+镜像大小 逻辑提及大小
+
+-a --all=true｜false 列出所有包括临时文件镜像文件，默认为否
+--digests=true|false 列出镜像的数字摘要值，默认为否
+-f --filter=[] 过滤列出的镜像。dangling=true 只显示没有被使用的镜像
+--format=&quot;TEMPLATE&quot;: 控制输出格式
+--no-trunc=true|false 对输出结果中太长的部分是否进行截断，默认为是
+-q --quiet=true｜false 仅输出ID信息，默认为否
+</code></pre><h4 id="tag">tag<a href="#tag" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<pre><code>为镜像添加标签|重命名
+docker tag xxx:yyy newXXX:yyy
+类似 ln 软链接
+</code></pre><h4 id="inspect">inspect<a href="#inspect" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<pre><code>docker  inspect image 获取镜像的详细信息，包括制作者、适应架构、各层的数字摘要 返回 json 格式
+
+docker  inspect -f {{&quot;&quot;.Architecture&quot;}} xxx:yyy
+-s if the type is container
+</code></pre><h4 id="history">history<a href="#history" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<pre><code>docker history xxx:yyyy 列出各层的创建信息
+--no-trunc=false 输出完整命令
+</code></pre><h3 id="3搜寻镜像">3.搜寻镜像<a href="#3搜寻镜像" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>docker search [option] keyword
+-f --filter filter:过滤输出内容
+--format string: 格式化输出内容
+--limit int 限制输出个数，默认25个
+--no-trunc 不截断输出结果
+
+docker search --filter=is-official=true nginx
+docker search --filter=start=15 nginx --limit 15
+</code></pre><h3 id="4删除和清理镜像">4.删除和清理镜像<a href="#4删除和清理镜像" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<h4 id="标签删除">标签删除<a href="#标签删除" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<pre><code>docker rmi / docker image rm
+docker rmi IMAGE [IMAGE...]   IMAGE 可以为标签或id
+-f -force 强制删除，即使有容器依赖
+-no-prune 不要清理未带标签的父镜像
+多个标签链接到同一个镜像，只是删除一个标签
+</code></pre><h4 id="镜像id删除">镜像id删除<a href="#镜像id删除" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<pre><code>docker rmi id
+会先尝试删除所有指向该镜像的标签，然后删除该镜像文件本身
+如果该镜像创建的容器存在时，镜像文件默认是无法被删除的
+</code></pre><h4 id="镜像清理">镜像清理<a href="#镜像清理" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<pre><code>docker image prune
+-a -all 删除所有无用镜像，不光是临时镜像
+-filter filter 只清理符合给定过滤器的镜像
+-f -force 强制删除镜像，不进行提示确认
+</code></pre><h3 id="5创建镜像">5.创建镜像<a href="#5创建镜像" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>创建镜像方法主要有三种： 基于已有镜像的容器创建、基于本地模版导入、基于Dockerfile 创建
+commit import build
+</code></pre><h4 id="基于已有容器创建">基于已有容器创建<a href="#基于已有容器创建" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<pre><code>docker [container] commit
+docker [container] commit [options] container [repository] [:TAG]
+-a --author=&quot;&quot; 作者信息
+-c --change=[] 提交的时候执行 Dockerfile 指令，包括 CMD|ENTRYPOINT|ENV|EXPOSE|LABEL|ONBUILD|USER|VOLUME|WORKDIR
+-m --message=&quot;&quot; 提交信息
+-p --pause=true 提交时暂定容器运行
+</code></pre><h4 id="基于本地模版的导入">基于本地模版的导入<a href="#基于本地模版的导入" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<pre><code>docker [image] import [options] file|URL| -[repository][:TAG]
+</code></pre><h4 id="基于dockerfile-创建">基于Dockerfile 创建<a href="#基于dockerfile-创建" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile">Dockerfile 是一个文本文件，利用给定的指令描述基于某个父镜像创建新镜像的过程<span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="k">FROM</span><span class="s"> 基础镜像</span><span class="err">
+</span><span class="err"></span><span class="k">MAINTAINER</span><span class="s"> 维护者信息</span><span class="err">
+</span><span class="err"></span><span class="k">RUN</span> 操作 构建过程中执行<span class="err">
+</span><span class="err"></span><span class="k">ADD</span> copy 文件，会自动解压<span class="err">
+</span><span class="err"></span><span class="k">COPY</span> sourcedir/file dest_dir/file 拷贝文件，不会解压<span class="err">
+</span><span class="err"></span><span class="k">WORKDIR</span><span class="s"> 切换工作目录</span><span class="err">
+</span><span class="err"></span><span class="k">VOLUME</span><span class="s"> 目录挂载</span><span class="err">
+</span><span class="err"></span><span class="k">EXPOSE</span><span class="s"> 内部服务端口</span><span class="err">
+</span><span class="err"></span><span class="k">CMD</span> 执行 DockFile 中的命令 容器启动后执行<span class="err">
+</span><span class="err"></span><span class="k">ENV</span> 设置环境变量<span class="err">
+</span></code></pre></div><h3 id="6存出载入镜像-saveload">6.存出/载入镜像 save/load<a href="#6存出载入镜像-saveload" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>docker [image] save/load
+</code></pre><ul>
+<li>
+<p>存出镜像</p>
+<pre><code>docker save -o outName xxx:yyy
+-o -output string 指定导出到指定文件
+</code></pre></li>
+<li>
+<p>载入</p>
+<pre><code>docker load -i xxx
+docker load &lt; xxx
+-i -input string 指定文件中读入镜像内容
+</code></pre></li>
+</ul>
+<h3 id="7上传镜像">7.上传镜像<a href="#7上传镜像" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>docker [image] push 上传镜像到仓库，默认上传到 Docker Hub 官方仓库，需要登陆，登陆后信心保存在～/.docker目录
+docker [image] push NAME[:TAG] | [registry_host[:registry_port]/]NAME[:TAG]
+</code></pre><h2 id="container">container<a href="#container" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<pre><code>容器是镜像的一个运行实例，镜像是静态的只读文件，容器是带有运行时需要的可写文件层，容器的应用进程处于运行状态
+</code></pre><h3 id="1创建容器">1.创建容器<a href="#1创建容器" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>docker [container] create
+docker run -it --privileged --name=容器名称 镜像名称:标签 /bin/bash #一次性交互 exit 退出容器
+docker run -dt --name=容器名称 镜像名称:标签 cmd # detach
+docker run -d -p 8080:80 --name Nginx nginx
+登陆后台启动容器
+docker exit -it 容器名称 /bin/bash
+run 									创建容器
+-i										运行容器
+-d 										detach以后台 daemon 的方式运行
+--name      					指定一个容器的名字,后面操作系统通过这个名字你在定位容器
+-t										分配一个伪终端，启动后会进入命令行 Allocate a pseudo-TTY
+-p 										端口映射
+	-P 随机映射
+	-p 指定
+		hostport:containerport
+		ip:hostport:container:port
+		ip::conntainerport
+		hostport:containerport:|udp
+-v 										挂载 volume
+-net									指定容器的网络连接类型 bridge / host / none / contriner:&lt;name|id&gt;
+ping 114.114.114.114	启动容器执行的命令
+--privileged 				 	真正的root权限
+</code></pre><h3 id="命令与运行模式选项">命令与运行模式选项<a href="#命令与运行模式选项" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<table>
+<thead>
+<tr>
+<th>-a &ndash;attach=[]</th>
+<th>是否绑定到标准输入、输出和错误</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-d &ndash;detach=true|false</td>
+<td>是否在后台运行容器，默认为否</td>
+</tr>
+<tr>
+<td>&ndash;detach-keys=&quot;&quot;</td>
+<td>从attach模式退出的快捷键</td>
+</tr>
+<tr>
+<td>&ndash;entrypoint=&quot;&quot;</td>
+<td>镜像存在入口命令时，覆盖为新的命令</td>
+</tr>
+<tr>
+<td>&ndash;expose=[]</td>
+<td>指定容器会暴露出来的端口或端口范围</td>
+</tr>
+<tr>
+<td>&ndash;group-add=[]</td>
+<td>运行容器的用户组</td>
+</tr>
+<tr>
+<td>-i &ndash;interactive=true|false</td>
+<td>保持标准输入打开，默认false</td>
+</tr>
+<tr>
+<td>&ndash;ipc=&quot;&quot;</td>
+<td>容器IPC命令空间，可以为其他容器或主机</td>
+</tr>
+<tr>
+<td>&ndash;isolation=&ldquo;default&rdquo;</td>
+<td>容器使用的隔离机制</td>
+</tr>
+<tr>
+<td>&ndash;log-driver=&ldquo;json-file&rdquo;</td>
+<td>指定容器的日志驱动类型，可以为json-file、syslog、journals、self、f luentd、analogs或none</td>
+</tr>
+<tr>
+<td>&ndash;log-opt=[]</td>
+<td>传递给日志驱动的选项</td>
+</tr>
+<tr>
+<td>&ndash;net-alias=[]</td>
+<td>容器在网络中的别名</td>
+</tr>
+<tr>
+<td>-P &ndash;publish-all=true|false</td>
+<td>通过NAT机制将容器标记暴露的端口自动应色号到本地主机的临时端口</td>
+</tr>
+<tr>
+<td>-p &ndash;publish=[]</td>
+<td>指定如何映射到本地主机端口</td>
+</tr>
+<tr>
+<td>&ndash;pid=host</td>
+<td>容器的 PID 命名空间</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="2启动容器">2.启动容器<a href="#2启动容器" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>docker start container 命令来启动一个已经创建的容器
+docker ps
+docker run = docker create &amp;&amp; start
+</code></pre><pre><code>docker run container xxx
+1.检查本地是否存在指定的镜像，不存在就从公有仓库下载
+2.利用镜像创建一个容器，并启动该容器
+3.分配一个文件系统给容器，并在只读的镜像层外挂一层可读写层
+4.从宿主机配置的网桥接口中桥接一个虚拟接口到容器中去
+5.从网桥的地址池配置一个IP地址给容器
+6.执行用户指定的应用程序
+7.执行完毕后容器被自动终止
+</code></pre><pre><code>docker run -it xxx /bin/bash
+-t 分配一个伪终端，并绑定到容器的标准输入上，
+-i 让容器的标准输入保持打开
+-d 守护态运行
+exit 退出容器
+</code></pre><h3 id="3查看容器日志">3.查看容器日志<a href="#3查看容器日志" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>docker logs container
+--details 打印详细信息
+-f -follow 持续保持输出
+--since string 输出从某个时间开始的日志
+-n --tail string 输出最近的若干日志
+-t -timestamps 显示时间戳信息
+-until string 输出某个时间之前的日志
+
+docker run -dit ubt /bin/bash -c &quot;while true; do echo hello world;sleep 1;done&quot;
+</code></pre><h3 id="4列出容器">4.列出容器<a href="#4列出容器" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>docker ps [option]
+-a 显示所有容器，包括未运行的
+-f 根据条件过滤
+--format 指定返回值的模版文件
+-l 显示最近创建的容器
+-n 列出最近创建的n个容器
+--no-trunc 不截断输出
+-q 静默模式，只显示容器编号
+-s 显示总文件大小
+docker ps -a --filter 'exited=0'
+docker ps --filter status=running
+docker ps --filter status=paused
+</code></pre><h3 id="5暂停容器">5.暂停容器<a href="#5暂停容器" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>docker pause container 停止容器
+docker unpause container 恢复运行
+docker restart container 命令会将一个运行态的容器先终止，在重新启动
+</code></pre><h3 id="6停止容器">6.停止容器<a href="#6停止容器" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>docker stop container -t[--time[=n]]
+stop 命令会先向容器发送 SIGTERM 信号，等待一段时间后（默认为10s），在发送 SIGKILL 信号来终止容器
+docker ps -qa 查看所有container id
+</code></pre><h3 id="7进入容器">7.进入容器<a href="#7进入容器" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>使用 -d 参数，容器启动后会进入后台，需要进入容器进行操作，官方推荐使用 attach / exec 命令
+</code></pre><ul>
+<li>
+<p>attach</p>
+<pre><code>docker attach [--detach-keys[=]]] [--no-stdin] [--sig-proxy[=true]] container
+---detach-keys[=[]] 指定退出 attach 模式的快捷键序列，默认是 CTRL -p CTRL -q
+--no-stdin=true|false 是否关闭默认标准输入，默认是保持打开
+--sig-proxy=true|false 是否代理收到的系统信号给应用进程，默认是true
+</code></pre></li>
+<li>
+<p>exec</p>
+<pre><code>Docker 1.3.0 exec 可以直接在运行中的容器内执行任意命令
+docker exec [-d| --detach] [--detach-keys[=[]]] [-i|--interactive] [--privileged] [-t|--tty] [-u|--user[=USER]] container command args...
+-d --detach 在容器中后台执行命令
+--detach-keys=&quot;&quot; 指定将容器切回后台的按键
+-e --env=[] 指令环境变量列表
+-i --interactive=true|false 打开标准输入接受用户输入命令，默认值false
+--privileged=true|false 是否给执行命令以高权限，默认值为false
+-t --tty=true｜false 分配伪终端，默认值为false
+-u --user=&quot;&quot; 执行命令的用户名或ID
+eg:
+	docker exec -it xxx /bin/bash
+	-it 保持标准输入打开，并且分配一个伪终端
+</code></pre></li>
+</ul>
+<h3 id="8删除容器">8.删除容器<a href="#8删除容器" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>docker rm [-f｜-force] [-l|--link] [-v|--volumes] container 删除处于终止或退出状态的容器
+-f --force=false 是否强制执行并删除一个运行中的容器
+-l --link=false 删除容器的链接，但保留容器
+-v --volumes=false 删除容器挂载的数据卷
+</code></pre><h3 id="9导入和导出容器">9.导入和导出容器<a href="#9导入和导出容器" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>导出 导出一个已经创建的容器到一个文件，不管此时这个容器是否处于运行状态
+docker export  [-o|--output[=&quot;&quot;]] container
+-o 指定导出的 tar 文件名
+</code></pre><pre><code>导入
+docker import [-c｜--change[=[]]] [-m|--message[=MESSAGE]] file|URL|-[REPOSITORY[:TAG]]
+用户可以通过 -c --change=[] 选项在导入的同时执行对容器进行修改的Dockerfile指令
+</code></pre><h4 id="区别-importload">区别 import|load<a href="#区别-importload" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<pre><code>import 导入一个容器快照到本地镜像库，容器快照文件将丢失所有的历史记录和元数据信息，仅保存容器当时的快照状态
+load 镜像存储文件将保存完整记录，体积更大
+从容器快照文件导入时可以重新指定标签等元数据信息
+</code></pre><h3 id="10查看容器-inspecttopstats">10.查看容器 inspect|top|stats<a href="#10查看容器-inspecttopstats" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>查看容器详情可以使用 docker container inspect [options] container
+查看容器内进程 docker top xxx
+查看统计信息 docker stats xxx
+		-a --all 输出所有容器统计信息，默认仅在运行中
+		-format string 格式化输出信息
+		-no-stream 不持续输出，默认会自动更新持续实时结果
+		-no-trunc 不截断输出信息
+</code></pre><h3 id="11cpdiffportupdate">11.cp|diff|port|update<a href="#11cpdiffportupdate" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<ul>
+<li>
+<pre><code>复制文件 docker cp [options] container:src_path dest_path|-
+	-a -archive 打包模式，复制文件会带有原始的 uid/gid
+	-L -follow-link 跟随软连接，当原路径为软连接时，默认是只复制链接信息，使用该选项会复制链接的目标内容
+</code></pre></li>
+<li>
+<pre><code>查看变更 docker diff xxx 查看容器内文件系统变更
+</code></pre></li>
+<li>
+<pre><code>查看端口映射 docker port xxx [private_port[/proto]]
+</code></pre></li>
+<li>
+<pre><code>更新配置 docker update xxx 更新运行时配置，主要是一些资源的限制份额
+-blkio-weight uint16 更新块 io 限制，10-1000 默认0，代表无限制
+-cpu-period int 限制 cpu 调度器 (completely fair scheduler) 使用时间，单位为毫秒，最小1000
+-cpu-quota int 限制cpu 调度器 cfs 配额，单位为毫秒，最小 1000
+-cpu--rt-period int 限制 cpu 调度的实时周期，单位为毫秒
+-cpu-rt-runtime int 限制 cpu 调度器的实时运行时，单位为毫秒
+-c -cpu-shares int 限制 cpu 使用份额
+-cpus decimal 限制 cpu 个数
+-cpuset-cpus string 允许使用 cpu 核
+-cpuset-mems string 允许使用的内存块
+-kernel-memory bytes 限制使用的内核内存
+-m -memory bytes 限制使用的内存
+-memory-reservation bytes 内存软限制
+-memory-swap bytes 内存加上缓存区的限制 -l 表示对缓冲区无限制
+-restart string 容器退出后的重启策略
+</code></pre></li>
+</ul>
+<h2 id="仓库">仓库<a href="#仓库" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<h3 id="搭建本地私有仓库">搭建本地私有仓库<a href="#搭建本地私有仓库" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>1.docker run -d -p 5000:5000 --restart=always  -v /data/docker_local_repo:/var/lib/registry --name registry registry
+# /etc/docker/daemon.json
+{
+ &quot;registry-mirrors&quot;:[&quot;https://mirror.ccs.tencentyun.com&quot;],
+ &quot;insecure-registries&quot;:[&quot;guangchang.tech:5000&quot;]
+}
+2.docker tag image:tag registry_host/username/name:tag 标记
+3.docker push xxx 上传标记的镜像
+4.curl ip:port/v2/_catalog
+5.docker pull xxx/yyy:version
+查看images versions
+curl ip:port/xxx/tags/list
+</code></pre><h2 id="数据管理">数据管理<a href="#数据管理" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<pre><code>管理数据的两种主要方式
+1.数据卷    容器内数据直接映射到本地主机环境
+2.数据卷容器 使用特定的容器维护数据卷
+</code></pre><h3 id="数据卷">数据卷<a href="#数据卷" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>数据卷是一个可供容器使用的特殊目录，将主机操作系统目录直接映射进容器，类似于linux中的mount行为
+特性
+1.数据卷可以在容器之间共享和重用，容器间传递数据将变得高效方便
+2.对数据卷内数据的修改会立马生效，无论是容器内操作还是本地操作
+3.对数据卷的更新不回影响镜像，解耦开应用和数据
+4.卷会一直存在，知道没有容器使用，可以安全的卸载
+</code></pre><h4 id="创建数据卷">创建数据卷<a href="#创建数据卷" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<pre><code>volume 子命令管理数据卷
+docker volume create -d local test
+/var/lib/docker/volumes  #查看
+docker volume 还支持 inspect ls prune rm
+#
+docker volume ls
+docker volume inspect test
+[
+    {
+        &quot;CreatedAt&quot;: &quot;2021-06-18T00:33:25+08:00&quot;,
+        &quot;Driver&quot;: &quot;local&quot;, #使用的驱动程序，使用宿主机的本地存储
+        &quot;Labels&quot;: {},
+        &quot;Mountpoint&quot;: &quot;/var/lib/docker/volumes/test/_data&quot;,#挂载点
+        &quot;Name&quot;: &quot;test&quot;,
+        &quot;Options&quot;: {},
+        &quot;Scope&quot;: &quot;local&quot;
+    }
+]
+#安装插件，通过vieux/sshfs 驱动把数据卷的存储在其他主机上
+docker plugin install --grant-all-permissions vieux/sshfs
+#指定远程主机的登陆用户名、密码和数据存放目录
+docker volume create --driver vieux/sshfs \
+-o sshcmd=user@ip:/remote_path\ #确保远程目录存在,否则启动报错
+-o password=password \
+mysshvolume
+
+#启动容器挂载远程数据卷
+docker run -id \
+    --name testcon \
+    --mount type=volume,volume-driver=vieux/sshfs,source=mysshvolume,target=/world \
+    ubuntu /bin/bash
+</code></pre><h4 id="绑定数据卷">绑定数据卷<a href="#绑定数据卷" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h4>
+<pre><code>可以在创建容器时将主机本地的任意路径挂载到容器内作为数据卷
+docker  run 可以使用 -mount 选项使用数据卷
+-mount 支持三种类型的数据卷
+volume 普通数据卷 映射到主机 /var/lib/docker/volumes 路径下
+bind	 绑定数据卷，映射到主机指定路径下
+tmpfs  临时数据卷，只存在于内存中
+</code></pre><pre><code>docker run -d -P --name xxx --mount type=bind,source=/x,destination/y container
+docker run -d -P --name xxx --mount type=bind,src=/x,dst=/y container
+==
+docker run -d -P --name xxx -v /src:/dest
+本地路径必须是绝对路径，容器内路径可以是相对路径，目录不存在，docker 会自动创建
+Docker 挂载数据卷默认的默认权限是 读写rw，可以通过ro指定为只读
+docker run -d -P --name xxx -v /src:/dest:ro
+如果直接挂载一个文件到容器，使用文件编辑工具，包括 vi、sed --in-place时候，可能会造成文件inode的改变
+docker 1.10起，会导致报错误信息，推荐直接挂载文件所在的目录到容器内
+</code></pre><h2 id="数据卷容器">数据卷容器<a href="#数据卷容器" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h2>
+<pre><code>如果用户需要在多个容器之间共享一些持续更新的数据，最简单的方式是使用数据卷容器
+数据卷容器也是一个容器，目的是专门提供数据卷给其他容器挂载的
+</code></pre><h3 id="创建数据卷容器">创建数据卷容器<a href="#创建数据卷容器" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>docker run -it -v /dbdata --name container [command]
+创建好的数据卷是停止状态，因为使用 --volumes-from 参数挂载数据卷的容器自己不需要保持在运行状态
+#创建容器挂载数据卷
+
+</code></pre><h3 id="数据覆盖问题">数据覆盖问题<a href="#数据覆盖问题" class="anchor" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path><line x1="8" y1="12" x2="16" y2="12"></line></svg></a></h3>
+<pre><code>挂载一个空的数据卷到容器中的一个非空目录中，那么这个目录下的文件会被复制到数据卷中
+挂载一个非空的数据卷到容器中的一个目录中，容器中的目录会显示数据卷中的数据，如果原来容器中的目录又数据，这些原始数据会被隐藏掉
+</code></pre>
+			</div>
+			<hr class="post-end">
+			<footer class="post-info">
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-feather"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17.5" y1="15" x2="9" y2="15"></line></svg>spider</p>
+				<p>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg><span class="tag"><a href="http://1.116.1.92/tags/cloud">cloud</a></span><span class="tag"><a href="http://1.116.1.92/tags/docker">docker</a></span>
+				</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>1041 字</p>
+				<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>2021-08-11</p>
+			</footer>
+		</article>
+		<aside id="toc">
+			<div class="toc-title">目录</div>
+			<nav id="TableOfContents">
+  <ul>
+    <li><a href="#install">install</a></li>
+    <li><a href="#image">image</a>
+      <ul>
+        <li><a href="#1下载命令">1.下载命令</a></li>
+        <li><a href="#2查询镜像命令lstaginspect">2.查询镜像命令ls、tag、inspect</a></li>
+        <li><a href="#3搜寻镜像">3.搜寻镜像</a></li>
+        <li><a href="#4删除和清理镜像">4.删除和清理镜像</a></li>
+        <li><a href="#5创建镜像">5.创建镜像</a></li>
+        <li><a href="#6存出载入镜像-saveload">6.存出/载入镜像 save/load</a></li>
+        <li><a href="#7上传镜像">7.上传镜像</a></li>
+      </ul>
+    </li>
+    <li><a href="#container">container</a>
+      <ul>
+        <li><a href="#1创建容器">1.创建容器</a></li>
+        <li><a href="#命令与运行模式选项">命令与运行模式选项</a></li>
+        <li><a href="#2启动容器">2.启动容器</a></li>
+        <li><a href="#3查看容器日志">3.查看容器日志</a></li>
+        <li><a href="#4列出容器">4.列出容器</a></li>
+        <li><a href="#5暂停容器">5.暂停容器</a></li>
+        <li><a href="#6停止容器">6.停止容器</a></li>
+        <li><a href="#7进入容器">7.进入容器</a></li>
+        <li><a href="#8删除容器">8.删除容器</a></li>
+        <li><a href="#9导入和导出容器">9.导入和导出容器</a></li>
+        <li><a href="#10查看容器-inspecttopstats">10.查看容器 inspect|top|stats</a></li>
+        <li><a href="#11cpdiffportupdate">11.cp|diff|port|update</a></li>
+      </ul>
+    </li>
+    <li><a href="#仓库">仓库</a>
+      <ul>
+        <li><a href="#搭建本地私有仓库">搭建本地私有仓库</a></li>
+      </ul>
+    </li>
+    <li><a href="#数据管理">数据管理</a>
+      <ul>
+        <li><a href="#数据卷">数据卷</a></li>
+      </ul>
+    </li>
+    <li><a href="#数据卷容器">数据卷容器</a>
+      <ul>
+        <li><a href="#创建数据卷容器">创建数据卷容器</a></li>
+        <li><a href="#数据覆盖问题">数据覆盖问题</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+		</aside>
+		<div class="post-nav thin">
+			<a class="next-post" href="http://1.116.1.92/posts/cloud/k8s/">
+				<span class="post-nav-label"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>&nbsp;新</span><br><span>K8s 安装</span>
+			</a>
+			<a class="prev-post" href="http://1.116.1.92/posts/middle-aware/zookeeper/">
+				<span class="post-nav-label">旧&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span><br><span>Zookeeper</span>
+			</a>
+		</div>
+		<div id="comments" class="thin">
+</div>
+	</main>
+
+	<footer id="site-footer" class="section-inner thin animated fadeIn faster">
+		<p>&copy; 2021 <a href="http://1.116.1.92">不过如此</a> &#183; <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></p>
+		<p>
+			Made with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> &#183; Theme <a href="https://github.com/Track3/hermit" target="_blank" rel="noopener">Hermit</a> &#183; <a href="http://1.116.1.92/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+		</p>
+	</footer>
+
+
+
+	<script src="http://1.116.1.92/js/bundle.min.7d8545daa55d62427355498dd8da13f98ff79a7938ce7d2a5e2ae1ec0de3beb8.js" integrity="sha256-fYVF2qVdYkJzVUmN2NoT+Y/3mnk4zn0qXirh7A3jvrg=" crossorigin="anonymous"></script>
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-166045776-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

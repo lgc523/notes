@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>cloud on 不过如此</title>
+    <link>http://1.116.1.92/tags/cloud/</link>
+    <description>Recent content in cloud on 不过如此</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
+    <lastBuildDate>Wed, 11 Aug 2021 01:15:15 +0800</lastBuildDate><atom:link href="http://1.116.1.92/tags/cloud/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Centos8</title>
+      <link>http://1.116.1.92/posts/cloud/centos8/</link>
+      <pubDate>Wed, 11 Aug 2021 01:15:15 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/cloud/centos8/</guid>
+      <description>1.mongodb vi /etc/yum.repos.d/mongodb-org-4.4.repo [mongodb-org-4.2] name=MongoDB Repository baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/4.2/x86_64/ gpgcheck=1 enabled=1 gpgkey=https://www.mongodb.org/static/pgp/server-4.2.asc yum install mongodb-org systemctl enable mongodb --now # configure file /etc/mongod.conf # fix security: authorization: enabled #用户管理 db.version() mongo --quiet &amp;quot;mongodb://${MONGO_HOST}:${MONGO_PORT}&amp;quot; use db db.createUser({user:&amp;quot;${MONGO_USERNAME}&amp;quot;,pwd:&amp;quot;${MONGO_PASSWORD}&amp;quot;,roles:[&amp;quot;dbOwner&amp;quot;]}) dn.auth(&amp;quot;username&amp;quot;,&amp;quot;password&amp;quot;) db.getUsers() show users db.system.users.find().pretty() db.createUser( { user: &amp;quot;xxx&amp;quot;, pwd: &amp;quot;xxx&amp;quot;, roles: [ { role: &amp;quot;userAdminAnyDatabase&amp;quot;, db: &amp;quot;admin&amp;quot; } ] } ) db.createUser({user:&amp;quot;xxx&amp;quot;,pwd:&amp;quot;xxx&amp;quot;,roles:[&amp;quot;dbOwner&amp;quot;]}) 2.bottom sudo yum install epel-release sudo yum install snapd sudo systemctl enable --now snapd.socket sudo ln -s /var/lib/snapd/snap /snap sudo snap install bottom 3.zsh echo $shell yum install -y zsh chsh /bin/zsh sh -c &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&amp;quot; </description>
+    </item>
+    
+    <item>
+      <title>K8s 安装</title>
+      <link>http://1.116.1.92/posts/cloud/k8s/</link>
+      <pubDate>Wed, 11 Aug 2021 01:06:35 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/cloud/k8s/</guid>
+      <description>1.systemctl stop firewalld &amp;amp;&amp;amp; systemctl disable firewalld 2.sed -i &#39;s/SELINUX=enforcing/SELINUX=disabled/&#39; /etc/selinux/config;cat /etc/selinux/config 3.sed -i.bak &#39;/swap/s/^/#/&#39; /etc/fstab 4.cat &amp;lt;&amp;lt;EOF &amp;gt; /etc/sysctl.d/k8s.conf net.bridge.bridge-nf-call-ip6tables = 1 net.bridge.bridge-nf-call-iptables = 1 EOF 5.sysctl -p /etc/sysctl.d/k8s.conf 6.cat &amp;lt;&amp;lt;EOF &amp;gt; /etc/yum.repos.d/kubernetes.repo [kubernetes] name=Kubernetes baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/ enabled=1 gpgcheck=1 repo_gpgcheck=1 gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg EOF 7.yum clean all 8.yum -y makecache 9.yum install -y yum-utils device-mapper-persistent-data lvm2 10.yum-config-manager \ --add-repo \ https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo 11.yum install docker-ce-19.03.13 docker-ce-cli-19.03.13 containerd.io -y 12.systemctl enable --now docker 13.vi /etc/docker/daemon.json { &amp;quot;registry-mirrors&amp;quot;: [&amp;quot;https://mirror.ccs.tencentyun.com&amp;quot;], &amp;quot;insecure-registries&amp;quot;:[&amp;quot;guangchang.tech:5000&amp;quot;], &amp;quot;exec-opts&amp;quot;: [&amp;quot;native.cgroupdriver=systemd&amp;quot;] } 14.systemctl daemon-reload 15.systemctl restart docker 16.yum install -y kubelet-1.19.2 kubeadm-1.19.2 kubectl-1.19.2 17.kubeadm init phase preflight 18.echo &amp;quot;source &amp;lt;(kubectl completion bash)&amp;quot; &amp;gt;&amp;gt; ~/.bash_profile source .bash_profile 19.vim image.sh #!/bin/bash url=registry.aliyuncs.com/google_containers version=v1.19.2 images=(`kubeadm config images list --kubernetes-version=$version|awk -F &#39;/&#39; &#39;{print $2}&#39;`) for imagename in ${images[@]} ; do docker pull $url/$imagename docker tag $url/$imagename k8s.gcr.io/$imagename docker rmi -f $url/$imagename done 20.bash image.sh 21./var/lib/kubelet/kubeadm-flags.env cni 21.kubeadm init --apiserver-advertise-address=49.232.212.110 --kubernetes-version v1.19.2 --service-cidr=10.96.0.0/12 --pod-network-cidr=10.244.0.0/16 </description>
+    </item>
+    
+    <item>
+      <title>Docker</title>
+      <link>http://1.116.1.92/posts/cloud/docker/</link>
+      <pubDate>Wed, 11 Aug 2021 00:44:20 +0800</pubDate>
+      
+      <guid>http://1.116.1.92/posts/cloud/docker/</guid>
+      <description>install centos7
+1.yum remove docker \ docker-client \ docker-client-latest \ docker-common \ docker-latest \ docker-latest-logrotate \ docker-logrotate \ docker-ce 2.yum list installed | grep docker 3.rm -rf /var/lib/docker rm -fr /etc/docker rm -fr ~/.docker 4.yum install -y yum-utils 5.yum-config-manager \ --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo 6.yum repolist 7.yum list docker-ce --showduplicates | sort -r 8.yum -y install docker-ce-19.03.8 docker-ce-cli-19.03.8 containerd.io { &amp;quot;registry-mirrors&amp;quot;: [&amp;quot;https://mirror.ccs.tencentyun.com&amp;quot;], &amp;quot;insecure-registries&amp;quot;:[&amp;quot;guangchang.tech:5000&amp;quot;], &amp;quot;exec-opts&amp;quot;: [&amp;quot;native.cgroupdriver=systemd&amp;quot;], &amp;quot;log-driver&amp;quot;: &amp;quot;json-file&amp;quot;, &amp;quot;log-opts&amp;quot;: { &amp;quot;max-size&amp;quot;: &amp;quot;100m&amp;quot; }, &amp;quot;storage-driver&amp;quot;: &amp;quot;overlay2&amp;quot;, &amp;quot;storage-opts&amp;quot;: [ &amp;quot;overlay2.override_kernel_check=true&amp;quot; ] } image docker [image] pull [url/]NAME[:TAG] 默认 TAG latest 镜像文件一般由若干层 layer 组成，id 是层唯一的 id(实际上完整的 id 包括 256 bit, 64 个二进制字符组成) 当不同景象包括相同的层时，本地仅存储了层的一份内容，减少了存储空间 1.下载命令 -a --all-tags=true|false 是否获取仓库中的所有镜像，默认为否 --disable-content-trust 取消镜像的内容校验，默认为真 --registry-mirror=proxy_URL 镜像代理服务地址 2.查询镜像命令ls、tag、inspect ls docker images ｜ docker image ls 列出本地主机上已有镜像的基本信息 列出信息 来自于哪个仓库 镜像的标签，只是标记，不能够标识镜像内容 镜像的id 唯一标识镜像，两个镜像相同，实际指向了同一个镜像 创建时间 镜像最后的更新时间 镜像大小 逻辑提及大小 -a --all=true｜false 列出所有包括临时文件镜像文件，默认为否 --digests=true|false 列出镜像的数字摘要值，默认为否 -f --filter=[] 过滤列出的镜像。dangling=true 只显示没有被使用的镜像 --format=&amp;quot;TEMPLATE&amp;quot;: 控制输出格式 --no-trunc=true|false 对输出结果中太长的部分是否进行截断，默认为是 -q --quiet=true｜false 仅输出ID信息，默认为否 tag 为镜像添加标签|重命名 docker tag xxx:yyy newXXX:yyy 类似 ln 软链接 inspect docker inspect image 获取镜像的详细信息，包括制作者、适应架构、各层的数字摘要 返回 json 格式 docker inspect -f {{&amp;quot;&amp;quot;.Architecture&amp;quot;}} xxx:yyy -s if the type is container history docker history xxx:yyyy 列出各层的创建信息 --no-trunc=false 输出完整命令 3.搜寻镜像 docker search [option] keyword -f --filter filter:过滤输出内容 --format string: 格式化输出内容 --limit int 限制输出个数，默认25个 --no-trunc 不截断输出结果 docker search --filter=is-official=true nginx docker search --filter=start=15 nginx --limit 15 4.</description>
+    </item>
+    
+  </channel>
+</rss>
