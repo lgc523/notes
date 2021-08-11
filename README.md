@@ -6,7 +6,7 @@
 1.hugo
 2.hugo serve -D -t hermit
 ```
-### 临时发布脚本
+### 定时发布脚本
 
 ```shell
 echo "loading ..."
@@ -20,5 +20,10 @@ rm -fr /opt/nginx/html/public
 mv public /opt/nginx/html/
 echo "reload nginx ..."
 /opt/nginx/sbin/nginx -s reload
+
+#crontab -e
+0 */1 * * * bash /opt/shells/pull.sh > /opt/shells/pull.log 2>&1 &
+#reload crond service
+systemctl restart crond
 ```
 
