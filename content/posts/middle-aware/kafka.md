@@ -1356,23 +1356,28 @@ Log 物理以文件夹形式存储，每个 LogSegment 对应于磁盘文件上�
 每个 LogSegment 都有一个基准偏移量 bashOffset ,用来表示当前 LogSegment 中第一条消息的 offset
 偏移量是一个 64 位的长整型数，日志文件和两个索引文件都是根据基准偏移量命名的，名称固定位20位数字，没有达到的位数用0填充
 还会有一些 .deleted .cleaned .swap .snapshot .txnindx leader-epoch-checkpoint
+```
 
 ### 日志格式演变
 
+```
 vo-v1-v2
 消息集 存储、传输、压缩基本单元
-
-
+```
 
 ### 消息压缩
 
+```
 将多条消息一起进行压缩，保证较好的压缩小效果，生产者到消费者两端都是压缩后的消息
 日志中使用的压缩方式通过参数 compression.type 配置，默认是 producer ,保留生产者使用的压缩方式，还可以设置为 gzip,snappy,lz4
 compression.type 不压缩设置为 uncomoressed
 
-每个从生产者发出的消息集中的消息 offset 都是从 0  开始的，对 offset 的转换是在服务端进行的，客户端不需要做这个工作
+每个从生产者发出的消息集中的消息 offset 都是从 0 开始的
+对 offset 的转换是在服务端进行的，客户端不需要做这个工作。
 外层消息保存了内层消息的最后一条消息的绝对位移，绝对位移是相对于分区而言的
 v1 比 v0 多了一个 timestamp 字段
 外层消息
 如果 timestamp 类型是 CreateTime 设置的是内层最大的时间戳
 如果 timestamp 类型是 LogAppendTime 设置的是Kafka 服务器当前的时间戳
+```
+
