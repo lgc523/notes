@@ -1,12 +1,11 @@
 ---
-title: "Crontab"
+title: "job"
 date: 2021-08-17T00:43:43+08:00
 draft: true
 toc: true
 images:
 tags: 
-  - 定时任务
-  - linux
+  - engineering
 ---
 
 ## linux cron

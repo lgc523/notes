@@ -5,7 +5,7 @@ draft: true
 toc: true
 images:
 tags: 
-  - Mac
+  - engineering
 ---
 
 最近突然就想把我的笔记本重置一下，就记录一下mac上面一些app的安装

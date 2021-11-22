@@ -1,11 +1,11 @@
 ---
-title: "Java Build Tools Maven、Gradle"
+title: "Maven CLI、Plugin、CFG"
 date: 2021-11-12T23:18:53+08:00
 draft: true
 toc: true
 images:
 tags: 
-  - 工程、工具
+  - engineering
 ---
 
 开源项目比较大的一般都是用gradle构建，之前看的gradle也快忘了，最近开始看一些开源的项目，逐步完善记录一下。
@@ -27,6 +27,36 @@ tags:
 7. mvn clean versions:set -DnewVersion=2.0.0-SNAPSHOT #替换版本号 后面在进行操作
 8. mvn versions:revert #回滚版本号
 9. mvn deploy -s /xxxx/conf/settings.xml #使用指定配置文件
+9. **mvn help:active-profiles**
+
+### Test
+
+Maven Surefire Plugin，Bound to phase test
+
+```
+-Dmaven.test.skip=true 					 跳过单元测试编译和执行
+-DskipTests 					 					 跳过测试执行，会进行编译
+-Dmaven.test.failure.ignore=true 忽略错误继续编译构建 <testFailureIgnore>true</testFailureIgnore> 
+-Dtest=TestClassName test 			 指定测试类
+
+```
+
+```
+<plugin>  
+    <groupId>org.apache.maven.plugins</groupId>  
+    <artifactId>maven-surefire-plugin</artifactId>  
+    <configuration>  
+        <skip>true</skip>  
+         <skipTests>true</skipTests> 
+    </configuration>  
+</plugin>
+#springboot 需要在 properties 中配置
+<properties>
+<skipTests>true</skipTests>
+</properties>
+```
+
+
 
 ### Jar struct
 
@@ -69,6 +99,8 @@ optional 在单纯的项目依赖中可以减少依赖大小，A->B->{C，D}(opt
 1. mavenHelper 插件
 2.  <execlusions> 插件排除依赖
 3. ``mvn dependency:tree -T 1C|grep org.yaml:snakeyaml``  检测依赖的版本
+3. ``mvn dependency:list/tree/analyze``
+3. **shade plugin**  **relocation** ，将冲突的包改包名 
 
 ### lifeCycle
 
@@ -102,6 +134,18 @@ optional 在单纯的项目依赖中可以减少依赖大小，A->B->{C，D}(opt
 - compile + runtime
 - runtime + system
 
+### properties
+
+可用的配置变量 ${}
+
+- env.x 大写环境变量
+- project.x 
+- settings.x
+- Java properties  System.getProperties().list(System.out)
+- properties 定义的标签名
+
+
+
 ### java 9 or later 
 
 **maven-compiler-plugin** 在 **java9+** 版本中，版本要求 **3.6.0+** ，并且需要设置 properties
@@ -132,9 +176,85 @@ V3.8.2 https://maven.apache.org/ref/3.8.2/maven-embedder/cli.html
 
 用户可以自己拓展插件，命名规范 <my>-maven-plugin
 
-```
+- packing
 
-```
+  ```
+   <packaging>maven-plugin</packaging>
+  ```
+
+- dependency
+
+  ```
+   <dependency>
+              <groupId>org.apache.maven</groupId>
+              <artifactId>maven-plugin-api</artifactId>
+              <version>3.0</version>
+              <scope>provided</scope>
+          </dependency>
+  
+          <dependency>
+              <groupId>org.apache.maven.plugin-tools</groupId>
+              <artifactId>maven-plugin-annotations</artifactId>
+              <version>3.4</version>
+              <scope>provided</scope>
+          </dependency>
+  ```
+
+- extend
+
+  ```
+  @Mojo(name = "hello")
+  public class HelloMojo extends AbstractMojo {
+  
+      Log lg = getLog();
+      Map ctx = getPluginContext();
+  
+      public void execute() {
+          lg.info("Hello，definition use @goal at doc cause conflict");
+          ctx.put("mojoName", this.getClass().getName());
+          getLog().info("inject context over!");
+      }
+  }
+  只有 execute 里面可以执行，携带 log,context 实例
+  ```
+
+- lifecycle
+
+  ```
+  涉及到 plexus 容器
+  @Component(role = AbstractMavenLifecycleParticipant.class)
+  public class MavenLIfeCycleHook extends AbstractMavenLifecycleParticipant {
+  
+      @Override
+      public void afterSessionStart(MavenSession session) throws MavenExecutionException {
+          System.out.println("sessions start ...");
+          MavenExecutionRequest request = session.getRequest();
+          System.out.println(JSON.toJSONString(request));
+          super.afterSessionStart(session);
+      }
+  
+      @Override
+      public void afterProjectsRead(MavenSession session) throws MavenExecutionException {
+          MavenExecutionRequest request = session.getRequest();
+          System.out.println("after projects read...");
+          System.out.println(JSON.toJSONString(request));
+          Settings settings = session.getSettings();
+          System.out.println(JSON.toJSONString(settings));
+          super.afterProjectsRead(session);
+      }
+  
+      @Override
+      public void afterSessionEnd(MavenSession session) throws MavenExecutionException {
+          System.out.println("session end...");
+          MavenExecutionRequest request = session.getRequest();
+          System.out.println(JSON.toJSONString(request));
+          super.afterSessionEnd(session);
+      }
+  }
+  
+  ```
+
+  
 
 ### repository
 
@@ -216,5 +336,74 @@ This plugin has 6 goals:
 
 能不能通过插件影响 springboot jar包结构，在编译期影响文件，来提高项目的启动速度， 目前有一个实现是在 spring 环境 启动 be an post 回调完成的，会很慢。
 
-TODO
+### plugin
+
+#### shade
+
+Shade plugin 将所有依赖的包打到一块(repackage)，指定 main 函数，构建可执行 jar 包，配合 classifierName 可以隔离版本解决依赖冲突。
+
+```
+<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>jdk15</shadedClassifierName>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>dev.spider.cli.ApacheCli</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+</plugin>
+```
+
+#### javadoc
+
+```
+<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <charset>UTF-8</charset>
+                    <docencoding>UTF-8</docencoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+</plugin>
+```
+
+#### versions
+
+常用的升级版本策略
+
+```
+mvn versions:set -DnewVersion [=1.2.0-SNAPSHOT] 升级版本
+mvn versions:revert
+mvn versions:set -DremoveSnapshot=true -DgenerateBackupPoms=false 去掉 snapshot
+mvn help:describe -Dplugin=versions -o -Dgoal=set -Ddetail 
+```
+
+#### release
+
+发布 release 版本，可选 tag/branch，实现递增版本号，发布release jar
+
+可以从 SNAPSHOT 转换到 release ，还没用过，后面用了再说.
 
