@@ -128,9 +128,9 @@ tags:
 |                            rabbitmq                                                                   |
 |                                                                                                       |
 |       --------------------------------------------------------------------------------------------    |
-|              Data            Buffering        Data                Indexing &          Analysis &      |
-|              Collection                       Aggregation         storage           visualization     |
-|                                               & Processing                                            |
+|              Data          Buffering      Data Aggregation  Indexing & storage     Analysis &         |
+|              Collection                    & Processing                            visualization      |
+|                                                                                                       |
 |                                                                                                       |
 +-------------------------------------------------------------------------------------------------------+
 ```
