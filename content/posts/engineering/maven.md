@@ -31,13 +31,27 @@ tags:
 
 ### Test
 
-Maven Surefire Plugin，Bound to phase test
+Maven Surefire Plugin，Bound to phase test，基于 Junit，TestNG
+
+测试目标类
+
+- Test*.java
+
+- *Test.java
+
+- *TestCase.java
+
+
 
 ```
 -Dmaven.test.skip=true 					 跳过单元测试编译和执行
 -DskipTests 					 					 跳过测试执行，会进行编译
 -Dmaven.test.failure.ignore=true 忽略错误继续编译构建 <testFailureIgnore>true</testFailureIgnore> 
 -Dtest=TestClassName test 			 指定测试类
+-Dtest=#myMethod or #my*ethod    指定类方法测试，还支持正则，
+-Dtest=MyTest#myMethod
+-DthreadCountMethods=x					 多线程 
+
 
 ```
 
