@@ -84,6 +84,8 @@ Maven Surefire Plugin，Bound to phase test，基于 Junit，TestNG
 
 ### snapshot
 
+**-U** Forces a check for missing releases and updated snapshots on remote repositories
+
 开发过程中，模块之间相互依赖，迭代版本比较快，**Snapshot 版本每次发布会带上时间戳**，构建拉取依赖总是会拉到最新的版本。
 
 maven-repository-meta 定义的 snapshot metadata
@@ -115,6 +117,21 @@ optional 在单纯的项目依赖中可以减少依赖大小，A->B->{C，D}(opt
 3. ``mvn dependency:tree -T 1C|grep org.yaml:snakeyaml``  检测依赖的版本
 3. ``mvn dependency:list/tree/analyze``
 3. **shade plugin**  **relocation** ，将冲突的包改包名 
+
+### Install or fetch
+
+```
+mvn dependency:get -Dartifact=GROUPID:ARTIFACTID:VERSION:PACKAGING:CLASSIFIER -DrepoUrl=repo1.maven.org
+
+mvn dependency:get -DremoteRepositories=http://repo1.maven.org/maven2/ -DgroupId=org.yaml -DartifactId=snakeyaml -Dversion=1.26 -Dtransitive=false
+transitive 拉取依赖
+```
+
+```
+mvn install:install-file -Dfile=/opt/repo/org/yaml/snakeyaml/1.26/snakeyaml-1.26.jar -DgroupId=org.yaml -DartifactId=snakeyaml -Dversion=1.26 -Dpackaging=jar
+```
+
+
 
 ### lifeCycle
 
