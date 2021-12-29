@@ -130,7 +130,7 @@ hexdump 查看 class
 | 0      | 60 0x3c | 16         |
 | 0      | 61 0x3d | 17         |
 
-Java -target 可是使用指定版本的发行版编译器进行编译。
+Java -target 可以使用指定版本的发行版编译器进行编译。
 
 ### constant_pool
 
