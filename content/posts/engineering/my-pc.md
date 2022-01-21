@@ -226,6 +226,10 @@ alias mem='echo -e "\n$(top -l 1 | awk '/PhysMem/';)\n"'
 alias pp="ifconfig |grep netmask"
 #config for develop tools
 
+#urlencode/decode
+alias urldecode='python -c "import sys, urllib as ul; print ul.unquote_plus(sys.argv[1])"'
+alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])"'
+
 export JAVA_HOME=/opt/jdk8u302-b08/Contents/Home
 export PATH=$JAVA_HOME/bin:$PATH:.
 
@@ -251,6 +255,16 @@ IdentityFile ~/.ssh/lgc
 Host *
     ServerAliveInterval 60
 ```
+
+### ~/.vimrc
+
+```
+设置tab 字符宽度
+:set tabstop=4
+:set shiftwidth=4
+```
+
+
 
 ### maven
 
