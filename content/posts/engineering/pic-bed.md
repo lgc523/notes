@@ -10,7 +10,7 @@ tags:
 - picGo + sm.ms
 - https://github.com/Molunerfinn/PicGo/releases
 - ~/Library/Application Support/picgo
-- picGo server 30667 端口 文件<5m
+- picGo server 36677 端口 文件<5m
 - curl -H "Content-type:application/json" localhost:36677/upload -d'{"list":[""]} 
 
 ![qzx](https://s2.loli.net/2022/01/24/rTJUcKSd7yqPuOX.png)
