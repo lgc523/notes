@@ -7,7 +7,7 @@ tags:
   - engineering
 ---
 
-- picGo + sm.ms
+- picGo + sm.ms + sims-user
 - https://github.com/Molunerfinn/PicGo/releases
 - ~/Library/Application Support/picgo
 - picGo server 36677 端口 文件<5m
