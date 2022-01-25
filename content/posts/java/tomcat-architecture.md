@@ -41,13 +41,17 @@ tags:
 5. 二者分别拥有自己的 start()，stop() 方法来释放维护的资源
 5. **一个 server 可以包含多个 Connector，Container**
 
-![tomcat-connector-container](https://s2.loli.net/2022/01/25/6t73rQwYnl9Nhka.png)
+![tomcat-server](https://s2.loli.net/2022/01/25/lMJSHQafgvuox6E.png)
 
 ### 3.0
 
-1. 一个 server 包含多个 service （互相独立，共享一个 JVM 以及系统类库），**一个 service 负责维护（mapping）多个 container 和 一个 container** ,这样来自 connector 的请求只能由它所属 service 维护的 container 处理。
+一个 server 包含多个 service （互相独立，共享一个 JVM 以及系统类库）
+
+**一个 service 负责维护（mapping）多个 container 和 一个 container** ,这样来自 connector 的请求只能由它所属 service 维护的 container 处理。
 
 
+
+![container-engine](https://s2.loli.net/2022/01/25/SAce4noDp8PIJHC.png)
 
 
 ### 4.0
@@ -58,8 +62,7 @@ Engine （整个 servlet 引擎），**负责请求的处理，不需要考虑�
 
 context 表示一个 web 应用，一个 engine 可以包含多个 context。
 
-![container-engine](https://s2.loli.net/2022/01/25/ieOFCsyuQ6kzH89.png)
-
+![container-context](https://s2.loli.net/2022/01/25/Ma1QPcoVsxLWmSq.png)
 
 
 每个组件通过 start()，stop() 方法在启动时加载资源和停止时释放资源，使得组件充分解耦，提高服务器的可拓展性和可维护性。
@@ -70,13 +73,15 @@ context 表示一个 web 应用，一个 engine 可以包含多个 context。
 
 Host 表示虚拟主机，一个 Host 可以包含多个 context。
 
-![container-context](https://s2.loli.net/2022/01/25/fysWOLBGrdpiRxo.png)
+![container-host](https://s2.loli.net/2022/01/25/8IM9kb4Hcd5uTwj.png)
 
 ### 6.0
 
 Servlet 规范中一个 Web 应用中可以包含多个 Servlet 实例处理不同链接的请求，需要一个组件的概念来表示 Servlet 定义，Tomcat 中 Servlet 定义被称为 Wrapper。
 
-![container-wrapper](/Users/lgc/projects/images/container-wrapper.png)
+![container-wrapper](https://s2.loli.net/2022/01/25/WaZrNIB4FT9A3HV.png)
+
+
 
 ### 7.0
 
@@ -88,9 +93,8 @@ Engine，context 组件的作用就是处理接受客户端的请求并返回数
 
 默认实现。
 
+![tomcat-container](https://s2.loli.net/2022/01/25/FNUAHyYm4nL1Jci.png)
 
-
-![tomcat-container](https://s2.loli.net/2022/01/25/1VLq6emKzJog4x3.png)
 
 ### 后台处理
 
