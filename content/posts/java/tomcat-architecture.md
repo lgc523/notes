@@ -7,7 +7,7 @@ tags:
   - java
 ---
 
-基于 Java 语言的轻量级**应用服务器**，完全开源免费的 Servlet 容器实现，最初由 sun 公司开发（JavaWebServer），作为 Servlet 容器的参考是心啊，1999 年与 JServe （Apache）项目合并为 Tomcat，以 Apache License 许可发布。
+基于 Java 语言的轻量级**应用服务器**，完全开源免费的 Servlet 容器实现，最初由 sun 公司开发（JavaWebServer），作为 Servlet 容器的参考实现，1999 年与 JServe （Apache）项目合并为 Tomcat，以 Apache License 许可发布。
 
 > 微服务架构 https://martinfowler.com/articles/microservices.html
 
