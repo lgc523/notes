@@ -303,6 +303,43 @@ RepositoryRequest setRemoteRepositories( List<ArtifactRepository> remoteReposito
 
 通过构造参数，可以看到 本地仓库只能是一个，远程仓库可以是多个。
 
+### POM->Repository
+
+```
+<repositories>
+    <repository>
+        <id>alimaven</id>
+        <name>aliyun maven</name>
+        <url>https://maven.aliyun.com/nexus/content/repositories/central/</url>
+        <releases>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+        </releases>
+        <snapshots>
+            <enabled>false</enabled>
+            <updatePolicy>always</updatePolicy>
+            <checksumPolicy>warn</checksumPolicy>
+        </snapshots>
+    </repository>
+</repositories>
+<pluginRepositories>
+    <pluginRepository>
+        <id>alimaven</id>
+        <name>aliyun maven</name>
+        <url>https://maven.aliyun.com/nexus/content/repositories/central/</url>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </pluginRepository>
+</pluginRepositories>
+```
+
+
+
 ### artififact
 
 ```
@@ -438,3 +475,4 @@ mvn help:describe -Dplugin=versions -o -Dgoal=set -Ddetail
 
 可以从 SNAPSHOT 转换到 release ，还没用过，后面用了再说.
 
+### GPG
