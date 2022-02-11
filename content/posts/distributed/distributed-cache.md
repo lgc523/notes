@@ -56,7 +56,7 @@ Cache-Control 与 Expires 的功能一致，都是指明当前资源的有效期
 
 Cache-Control 设置相对时间，max-age 指明以秒为单位的缓存时间。
 
-Expires 设置以分钟为单位的绝对国旗时间。优先级比Cache-Control低，同时设置Expires 和 Cache-Control ，后者生效。
+Expires 设置以分钟为单位的绝对过期时间。优先级比Cache-Control低，同时设置Expires 和 Cache-Control ，后者生效。
 
 一般情况会一起使用 Cache-Control/Expires 、Last-Modified/ETag，这样即使服务端设置了缓存时间，当用户刷新时，浏览器会忽略缓存继续向服务器发送请求，这时 Last-Modified/ETag 能够很好利用服务端的返回码304,从而减少开销。
 
