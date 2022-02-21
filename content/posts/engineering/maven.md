@@ -476,3 +476,11 @@ mvn help:describe -Dplugin=versions -o -Dgoal=set -Ddetail
 可以从 SNAPSHOT 转换到 release ，还没用过，后面用了再说.
 
 ### GPG
+
+
+
+### fail-never
+
+跳过错误模块继续编译
+
+``mci --fail-never``
