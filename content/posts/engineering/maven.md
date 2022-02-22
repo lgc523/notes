@@ -476,3 +476,32 @@ mvn help:describe -Dplugin=versions -o -Dgoal=set -Ddetail
 可以从 SNAPSHOT 转换到 release ，还没用过，后面用了再说.
 
 ### GPG
+
+
+
+## Nexus http
+
+``Since Maven 3.8.1 http repositories are blocked``
+
+``add mirror allows http url in the Maven settings.xml``
+
+```
+Blocked mirror for repositories: [nexus (http://nexus.xxx.com/repository/maven-public/, default, releases+snapshots)]
+
+Since Maven 3.8.1 http repositories are blocked.
+
+Possible solutions:
+- Check that Maven settings.xml does not contain http repositories
+- Check that Maven pom files not contain http repository http://nexus.xxx.com/repository/maven-public/
+- Add a mirror(s) for http://nexus.xxx.com/repository/maven-public/ that allows http url in the Maven settings.xml
+- Downgrade Maven to version before 3.8.1 in settings
+```
+
+## 插件失效问题
+
+突然遇到插件在打包的时候失败，可以根据日志
+
+- 排查网络问题
+- 删除本地仓库的插件
+- 重新执行命令
+- 修改项目中的 repository
