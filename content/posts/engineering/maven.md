@@ -310,7 +310,7 @@ RepositoryRequest setRemoteRepositories( List<ArtifactRepository> remoteReposito
     <repository>
         <id>alimaven</id>
         <name>aliyun maven</name>
-        <url>https://maven.aliyun.com/nexus/content/repositories/central/</url>
+        <url>https://maven.aliyun.com/repository/public</url>
         <releases>
             <enabled>true</enabled>
             <updatePolicy>always</updatePolicy>
@@ -324,18 +324,17 @@ RepositoryRequest setRemoteRepositories( List<ArtifactRepository> remoteReposito
     </repository>
 </repositories>
 <pluginRepositories>
-    <pluginRepository>
-        <id>alimaven</id>
-        <name>aliyun maven</name>
-        <url>https://maven.aliyun.com/nexus/content/repositories/central/</url>
-        <releases>
-            <enabled>true</enabled>
-        </releases>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-    </pluginRepository>
-</pluginRepositories>
+        <pluginRepository>
+            <id>aliyun</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 ```
 
 
