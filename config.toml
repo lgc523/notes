@@ -41,7 +41,7 @@ summarylength = 180
   # images = [""]
   themeColor = "#fcfcfc"
 
-  homeSubtitle = "Golang、Java、Server、Trade-Off"
+  homeSubtitle = "Golang、Java、Server-Side、Trade-Off"
   footerCopyright = ' &#183; <a href="https://beian.miit.gov.cn">京ICP备2020035531号-2</a> &#183; <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=41012202000328" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="" style="float:left;"target="_blank">豫公网安备 41012202000328号</a>'
 
   # bgImg = ""  # Homepage background-image URL
