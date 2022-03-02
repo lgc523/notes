@@ -5,7 +5,6 @@ draft: true
 author: "spider"
 toc: true
 tags:
-  - cloud
   - docker
 ---
 
