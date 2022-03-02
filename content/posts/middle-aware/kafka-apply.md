@@ -6,7 +6,6 @@ toc: true
 images:
 tags: 
   - kafka
-  - middle-aware
 ---
 
 ## Kafka 应用
