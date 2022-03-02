@@ -8,11 +8,27 @@ tags:
   - file system
 ---
 
-查看 linux 支持的文件系统
+## 查看文件系统
 
-``ls -l /lib/modules/$(uname -r)/kernel/fs``
+``ls -l /lib/modules/$(uname -r)/kernel/fs`` 查看支持的文件类型
 
-``cat /proc/filesystems 已载入内存``
+``cat /proc/filesystems 已载入内存的磁盘类型``
+
+``parted -l``分区表信息
+
+``blkid``  查看块设备信息
+
+``df -T ``  查看所有磁盘的文件系统类型
+
+``df -T -h``  查看磁盘占用、类型、挂载点，``df --type=devtmpfs`` 筛选
+
+``fdisk -l`` 查看所有被识别的磁盘
+
+``lsblk`` 查看块设备，-d 只列出硬盘，不列出分区
+
+``lshw``  查看硬盘的详细信息
+
+``lsscsi`` 查看 SCSI 硬盘信息
 
 
 
@@ -64,6 +80,89 @@ mount /dev/loop10 /tmp/ext2
 
 文件系统实现了对线性存储空间的管理，存储空间既可以是磁盘等快设备，还可以是一个文件。
 
+## lost+found
+
+使用标准的 ext2、ext3、ext4、文件系统格式会产生一个目录，目的在于当文件系统发生错误时，将一些遗失的片段放置到这个目录下，xfs 文件系统不会存在。
+
 ## Ext4 布局
 
+ext4 文件系统将磁盘空间划分为若干个子空间（块组），每个子空间划分为等份的逻辑块，逻辑块是最小的管理单元，逻辑块的大小由用户在格式化时确定。
+
+
+
+
+
+![ext4-layout](https://s2.loli.net/2022/03/02/XUMzfhbiuLJ5SxN.png)
+
+
+
 ## 常见文件系统
+
+### 本地文件系统
+
+基于磁盘的普通本地文件系统
+
+- Ext4
+- XFS
+- ZFS
+- Btrfs
+
+Btrfs 和 ZFS 不仅可以管理一块磁盘，还可以实现多块磁盘的管理，另外实现了冗余管理，可以避免磁盘故障导致的数据丢失。
+
+### 虚拟文件系统/伪文件系统
+
+伪文件系统是 linux 中的概念，虚拟文件系统，不会持久化数据，是内存中的文件系统。是以文件系统的形态实现用户与内核数据交互的接口，常见的伪文件系统由 proc、sysfs、configs...
+
+linux 中 伪文件主要实现内核与用户态的交互，iostat 本质是通过访问 /proc/diskstats 文件获取信息，其内容是内核中对磁盘访问的统计，是内核某些数据结构的实例。
+
+## linux 文件种类
+
+ls 查看文件权限，第一个字母
+
+- device
+    - b， block 区块设备文件，存储数据、提供系统随机存取的接口设备
+    - c ，character 字符设备文件，串行端口的接口设备，eg 键盘、鼠标
+- sockets
+    - s 数据接口文件，通常用在网络上数据交换，/run,/tmp
+- fifo，pipe
+    - p，数据输送文件，主要解决多个程序同时读写一个文件造成的错误问题
+
+## 文件权限
+
+常见的 rwx 【 u:user g:group o:other】，可以通过 +、-、= 进行修改，chmod u=rwx,go=rx xxx
+
+chgrp、chown 修改用户组、拥有者
+
+一般可以用 chown user.group file 修改文件的拥有者和用户组，为了避免用户名存在 . ，使用 user:group 更好，chown .group file 也可以。
+
+**lsattr，chatter 命令可以控制文件修改、删除的权限**
+
+## 特殊权限
+
+chmod 修改 **suid、sgid、sbit** 权限
+
+## last
+
+用户登陆数据存放在 /var/log/wtmp，使用 last 可以读。
+
+## 文件名限制
+
+单一文件名或目录的最大容许文件名为 255 字节。(ext2、ext3、ext4、xfs)
+
+## type hash
+
+之前 只知道 type comman  可以看 shell 命令的类型信息(buildin、alias、keyword)，今天发现输出 command is hashed 
+
+gg 发现 shell 会把执行过的命令用哈希表及路况，下次执行就直接查看哈希表，找到就用命令的全路径，没找到再去 $PATH 中查找，同时会添加到哈希表中。
+
+``hash -r `` 清空哈希表
+
+## FHS
+
+``FileSystem Hierarchy Standard``，规定每个特定的目录下放置什么数据。
+
+针对目录架构定义的三层目录标准
+
+- / root 目录，与启动系统有关
+- /usr  unix software resource，与软件安装/执行有关
+- /var variable 与系统运行过程有关
