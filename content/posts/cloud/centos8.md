@@ -6,7 +6,6 @@ author: "spider"
 toc: getRuntime
 images:
 tags:
-  - cloud
   - centos
 ---
 
