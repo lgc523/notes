@@ -5,7 +5,7 @@ draft: true
 author: "spider"
 toc: true
 tags:
-  - middle-aware
+  - nginx
 ---
 nginx 是一个高性能的 HTTP 和**反向**代理服务器，同时也是一个 IMAP/POP3/SMTP 代理服务器，可以实现负载均衡、作为邮件代理服务器来收发邮件(最早开发的目的之一)，1.9.0 以后的版本还可以作为通用的 TCP/UDP 代理服务器，也可以提供一定的缓存服务功能。
 

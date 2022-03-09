@@ -5,7 +5,6 @@ draft: true
 author: "spider"
 toc: true
 tags:
-  - middle-aware
   - kafka
 ---
 深入理解 Kafka
