@@ -106,7 +106,7 @@ GET /_cat/shards
 ## CRUD
 
 - index
-  - Id 不存在创建新的 doc，否则删除现有的文档
+  - **Id 不存在创建新的 doc，否则删除现有的文档，新的文档被索引，版本信息 +1**
 - create
   - id 存在会失败
 - read
@@ -116,7 +116,7 @@ GET /_cat/shards
 
 
 
-## Create
+### Create
 
 ``PUT index_name/_create/{id}``
 
@@ -128,5 +128,140 @@ GET /_cat/shards
 
 ```
 自动生成id
+```
+
+### GET
+
+```
+GET /users/_doc/2
+{
+  "_index" : "users",
+  "_type" : "_doc",
+  "_id" : "2",
+  "_version" : 1,
+  "_seq_no" : 1,
+  "_primary_term" : 1,
+  "found" : true,
+  "_source" : {
+    "firstName" : "Jack",
+    "lastName" : "Johnson",
+    "tags" : [
+      "guitar",
+      "stateboard"
+    ]
+  }
+}
+```
+
+同一个 ID 的文档，即使被删除，version 号也会不断增加。
+
+### Update
+
+- 不会删除原来的文档，实现真正的数据更新
+- Post 方法，Payload 需要包含在 doc 中
+
+```
+POST /users/_update/2
+{
+  "doc":{
+    "firstName":"spider"
+  }
+}
+```
+
+### index
+
+```
+PUT users/_doc/{id}
+先删除，再更新版本号
+```
+
+## Bulk
+
+支持在一次 API 调用中，对不同的索引进行操作。
+
+支持四种类型操作
+
+- index
+- create
+- update
+- delete
+
+单个操作失败不会影响其他操作，返回每个操作执行的结果。
+
+```
+POST [/{index_name}/]_bulk
+{ "index" : { "_index" : "test", "_id" : "1" } }
+{ "field1" : "value1" }
+{"delete":{"_index":"testa","_id":"1"}}
+{"delete":{"_index":"test","_id":"2"}}
+```
+
+## mget
+
+```
+GET [{index_name}]/_mget
+{
+  "docs":[
+    {
+      "_index":"test",
+      "_id":1
+    },
+    {
+      "_index":"movies",
+      "_id":1
+    },
+     {
+      "_index":"movies",
+      "_id":29876
+    }
+    ]
+}
+```
+
+## msearch
+
+```
+POST kibana_sample_data_ecommerce/_msearch
+{}
+{"query":{"match_all":{}},"size":1}
+{"index":"kibana_sample_data_ecommerce"}
+{"query":{"match_all":{}},"size":1}
+{"index":"test"}
+{"query":{"match_all":{}},"size":2}
+```
+
+## Err status_code
+
+| 问题         | 原因               |
+| ------------ | ------------------ |
+| 无法连接     | 网络故障/集群down  |
+| 连接无法关闭 | 网络故障活节点出错 |
+| 429          | 集群过于繁忙       |
+| 4xx          | 请求体格式有错     |
+| 500          | 集群内部错误       |
+
+## info
+
+```
+
+#查看索引相关的信息
+GET kibana_sample_data_ecommerce
+#查看索引的文档个数
+GET kibana_sample_data_ecommerce/_count
+GET test
+POST kibana_sample_data_ecommerce/_search
+{
+}
+GET /_cat/indices/kibana*?v&s=index
+GET /_cat/indices?v&health=green
+GET /_cat/indices?v&s=docs.count:desc
+GET /_cat/indices/kibana*?pri&v&h=health,index,pri,rep,docs.count,mt
+GET /_cat/indices?v&h=i,tm&s=tm:desc
+GET /_cat/nodes?v
+GET /_cat/nodes?v&h=id,ip,port,v,m
+GET /_cat/shards
+GET /_cat/indices
+GET /_cluster/health?level=shards
 ```
 
