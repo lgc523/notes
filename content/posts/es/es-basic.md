@@ -9,6 +9,25 @@ tags:
 
 ## 节点
 
+```
+GET /{indexName}/_search_shards  
+"roles" : [
+        "data",
+        "data_cold",
+        "data_content",
+        "data_frozen",
+        "data_hot",
+        "data_warm",
+        "ingest",
+        "master",
+        "ml",
+        "remote_cluster_client",
+        "transform"
+      ]
+```
+
+
+
 - 每个节点启动，默认是 master eligible 节点，可以设置 node.master:false 禁止
 - master-eligible 节点可以参加选主流程，成为 master 节点
 - 第一个节点启动时候，会将自己选举成 master 节点
@@ -45,6 +64,12 @@ tags:
   - 主节点必须等待每一个节点集群状态的更新确认，客户端节点太多会成为负担。
 
 ## shard
+
+```
+GET /_cat/shards?v
+```
+
+
 
 ### Primary shard
 
@@ -199,6 +224,8 @@ POST [/{index_name}/]_bulk
 
 ## mget
 
+根据 doc id查询
+
 ```
 GET [{index_name}]/_mget
 {
@@ -220,6 +247,8 @@ GET [{index_name}]/_mget
 ```
 
 ## msearch
+
+根据查询条件查询
 
 ```
 POST kibana_sample_data_ecommerce/_msearch
@@ -264,4 +293,217 @@ GET /_cat/shards
 GET /_cat/indices
 GET /_cluster/health?level=shards
 ```
+
+## analyzer
+
+Analysis 文本分析是把全文本转换一系列单词 term/token 的过程。
+
+Analysis 通过 analyzer 来实现的，可以使用内置的分析器或者按需定制化分析器。
+
+数据写入和匹配 Query 语句时需要用相同的分析器对查询语句进行分析。
+
+### 组成
+
+- **character filters**
+  - 针对原始文本处理，eg 去除 html 标签
+- **tokenizer**
+  - 按照规则切分单词
+- **token filter**
+  - 将切分的单词进行加工，大小写转换，删除 stop words
+
+
+
+![analyzer](https://s2.loli.net/2022/04/04/2uH6VjT5tqAlSEL.png)
+
+### 内置分词器
+
+- Standard Analyzer 默认粉刺起，按词切分，小些处理
+- Simple Analyzer     按照非字母切分，符号被过滤，小写处理
+- Stop Analyzer 小写处理，停用词过滤（the ,a , is）
+- Whitespace Analyzer 按照空格切分，不转小写
+- Keyword Analyzer 不分词，直接将输入当作输出
+- Patter Analyzer 正则表达式，默认 \W+ （非字符分隔）
+- Language 提供了30多种常见语言的分词器
+- Customer Analyzer 自定义分词器
+
+### _analyzer API
+
+- 直接指定 Analyzer 进行测试
+
+  ```
+  GET /_analyze
+  {
+    "analyzer": "standard",
+    "text":"Master Elasticsearch,elasticsearch in Action"
+  }
+  ```
+
+- 指定索引的字段进行测试
+
+  ```
+  POST movies/_analyze
+  {
+    "field": "title",
+    "text": ["Mastering Elasticsearch"]
+  }
+  ```
+
+- 自定义分词器进行测试
+
+  ```
+  POST /_analyze
+  {
+    "tokenizer": "standard",
+    "filter": ["lowercase"],
+    "text":"Mastering Elasticsearch"
+  }
+  ```
+
+### standard analyzer
+
+- 默认分词器
+- 按词切分
+- 小写处理
+
+![standard_analyzer](https://s2.loli.net/2022/04/04/QYpcJXr7fmjvL5G.png)
+
+```
+GET /_analyze
+{
+  "analyzer": "standard",
+  "text": ["2 running Quick brown-foxes leap over lazy dogs in the summer evening"]
+}
+只会对词进行切分，不过过滤停用词 in the
+```
+
+### simple analyzer
+
+- 非字母切分，非字母的都被去除
+- 小写处理
+
+```
+GET /_analyze
+{
+  "analyzer": "simple",
+  "text": ["2 running Quick brown-foxes leap over lazy dogs in the summer evening"]
+}
+brown
+foxes
+```
+
+### whitespace
+
+- 按照空格切分
+
+```
+GET /_analyze
+{
+  "analyzer": "whitespace",
+  "text": ["2 running Quick brown-foxes leap over lazy dogs in the summer evening"]
+}
+12 个 token
+```
+
+### stop analyzer
+
+- 非字母切分，非字母的都被去除
+- 小写处理
+- Stop  filter
+  - 去除 the a is 等修饰性词语
+
+```
+GET /_analyze
+{
+  "analyzer": "stop",
+  "text": ["2 running Quick brown-foxes leap over lazy dogs in the summer evening"]
+}
+2 也没有了，
+```
+
+### Keyword analyzer
+
+```
+GET /_analyze
+{
+  "analyzer": "keyword",
+  "text": ["2 running Quick brown-foxes leap over lazy dogs in the summer evening"]
+}
+不分词
+{
+  "tokens" : [
+    {
+      "token" : "2 running Quick brown-foxes leap over lazy dogs in the summer evening",
+      "start_offset" : 0,
+      "end_offset" : 69,
+      "type" : "word",
+      "position" : 0
+    }
+  ]
+}
+```
+
+### Pattern analyzer
+
+### ICU Analyzer
+
+- Elastic search-plugin install analysis-icu
+- 提供了 unicode 支持，更好的支持亚洲语言
+
+## 倒排索引
+
+
+
+## Search api
+
+- URL Search
+
+  - GET 方法，在 url 中使用查询参数
+  - 使用 'q' 指定查询字符串
+  - "query string syntax" KV 键值对
+
+  ```
+  cu http://localhost:9200/kibana_sample_data_ecommerce/_search?q=customer_first_name:Eddie | json
+  ```
+
+  | 语法                   | 范围                                     |
+  | ---------------------- | ---------------------------------------- |
+  | /_search               | 集群上所有索引                           |
+  | /index1/_search        | index1                                   |
+  | /index1.index2/_search | index1.index2，一条语句再多个index上执行 |
+  | /index*/_search        | Index 开头的索引                         |
+
+  
+
+- Request Body Search
+
+  - 基于 JSON 格式的 Query Domain Specific Language
+
+  ```
+  cu -XGET/POST http://localhost:9200/kibana_sample_data_ecommerce/_search -H "Content-type:application/json" -d '{"query":
+  			{
+  				"match_all":{}
+  			}
+  		 }' | json
+  ```
+
+Relevance
+
+衡量相关性
+
+Information retrieval
+
+- precision 查准率，尽可能返回较少的无关文档
+- recall 查全率，尽量返回较多的相关文档
+- ranking 是否能够按照相关度进行排序
+
+## URI Search
+
+- q 指定查询语句，query string syntax
+- df 默认字段，不指定时会对所有字段进行查询
+- sort 排序,from, size 用于分页
+- profile 可以查看查询时如何被执行的
+
+### query string syntax
+
+
 
