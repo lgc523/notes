@@ -5,7 +5,7 @@ draft: true
 toc: true
 images:
 tags: 
-  - Elasticsearch
+  - es
 ---
 
 ## Lucene
