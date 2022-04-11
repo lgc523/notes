@@ -1,7 +1,7 @@
 baseURL = "https://guangchang.tech"
 languageCode = "en-us"
 defaultContentLanguage = "zh-hans"
-title = "Keep Graceful"
+title = "不过如此"
 theme = "hermit"
 # enableGitInfo = true
 pygmentsCodefences  = true
